@@ -1,0 +1,937 @@
+Terminais sem uso na gramática
+
+   PRINT
+   IF
+   ELSE
+   ELIF
+   WHILE
+   FOR
+   END
+   SEMICOLON
+   NEGATION
+   CPRODUCT
+   SPRODUCT
+   TMATRIX
+   IMATRIX
+   EQ
+   NE
+   GT
+   GE
+   LT
+   LE
+   INCREMENT
+   DECREMENT
+   ERROR
+   TRUE
+   FALSE
+   AND
+   OR
+
+
+Gramática
+
+    0 $accept: code $end
+
+    1 code: declaracoes nlines acoes nlines
+    2     | declaracoes nlines
+
+    3 nlines: NLINE
+    4       | nlines NLINE
+
+    5 declaracoes: declaracao
+    6            | declaracoes nlines declaracao
+
+    7 declaracao: escalar
+    8           | vetorial
+    9           | matricial
+   10           | escalar atribuition literal
+   11           | vetorial atribuition vector_literal
+   12           | matricial atribuition matrix_literal
+
+   13 atribuition: SPACE ATRIBUITION SPACE
+
+   14 acoes: acao
+   15      | acoes nlines acao
+
+   16 acao: ID atribuition expr
+   17     | expr
+
+   18 expr: OPARENTHESIS SPACE expr SPACE CPARENTHESIS
+   19     | mate_expr
+
+   20 mate_expr: literal SPACE matematical SPACE literal
+   21          | ID SPACE matematical SPACE ID
+   22          | literal SPACE matematical SPACE ID
+   23          | ID SPACE matematical SPACE literal
+
+   24 dimension: OBRACKET INTEGER CBRACKET
+
+   25 escalar: type SPACE ID
+
+   26 vetorial: type SPACE ID dimension
+
+   27 matricial: type SPACE ID dimension dimension
+
+   28 vector_literal: OCBRACKET literals CCBRACKET
+   29               | lit_none
+
+   30 matrix_literal: OCBRACKET matrix_literal CCBRACKET
+   31               | matrix_literal COLON vector_literal
+   32               | vector_literal
+
+   33 literals: literal
+   34         | literals COLON literal
+
+   35 matematical: SUM
+   36            | SUBTRACT
+   37            | MULTIPLY
+   38            | DIVIDE
+   39            | POW
+   40            | MODULUS
+
+   41 literal: INTEGER
+   42        | REAL
+
+   43 lit_none: NONE
+
+   44 type: TINT
+   45     | TREAL
+
+
+Terminais, com as regras onde eles aparecem
+
+$end (0) 0
+error (256)
+SUM <token> (258) 35
+SUBTRACT <token> (259) 36
+PRINT <token> (260)
+IF <token> (261)
+ELSE <token> (262)
+ELIF <token> (263)
+WHILE <token> (264)
+FOR <token> (265)
+END <token> (266)
+TINT <token> (267) 44
+TREAL <token> (268) 45
+SEMICOLON <token> (269)
+OPARENTHESIS <token> (270) 18
+CPARENTHESIS <token> (271) 18
+OBRACKET <token> (272) 24
+CBRACKET <token> (273) 24
+COLON <token> (274) 31 34
+NEGATION <token> (275)
+ATRIBUITION <token> (276) 13
+MULTIPLY <token> (277) 37
+DIVIDE <token> (278) 38
+POW <token> (279) 39
+MODULUS <token> (280) 40
+CPRODUCT <token> (281)
+SPRODUCT <token> (282)
+TMATRIX <token> (283)
+IMATRIX <token> (284)
+EQ <token> (285)
+NE <token> (286)
+GT <token> (287)
+GE <token> (288)
+LT <token> (289)
+LE <token> (290)
+INCREMENT <token> (291)
+DECREMENT <token> (292)
+NONE <token> (293) 43
+SPACE <token> (294) 13 18 20 21 22 23 25 26 27
+NLINE <token> (295) 3 4
+ID <token> (296) 16 21 22 23 25 26 27
+INTEGER <token> (297) 24 41
+REAL <token> (298) 42
+ERROR <token> (299)
+OCBRACKET <token> (300) 28 30
+CCBRACKET <token> (301) 28 30
+TRUE <token> (302)
+FALSE <token> (303)
+AND <token> (304)
+OR <token> (305)
+
+
+Não terminais com as regras onde eles aparecem
+
+$accept (51)
+    à esquerda: 0
+code <node> (52)
+    à esquerda: 1 2, à direita: 0
+nlines <node> (53)
+    à esquerda: 3 4, à direita: 1 2 4 6 15
+declaracoes <node> (54)
+    à esquerda: 5 6, à direita: 1 2 6
+declaracao <node> (55)
+    à esquerda: 7 8 9 10 11 12, à direita: 5 6
+atribuition <node> (56)
+    à esquerda: 13, à direita: 10 11 12 16
+acoes <node> (57)
+    à esquerda: 14 15, à direita: 1 15
+acao <node> (58)
+    à esquerda: 16 17, à direita: 14 15
+expr <node> (59)
+    à esquerda: 18 19, à direita: 16 17 18
+mate_expr <node> (60)
+    à esquerda: 20 21 22 23, à direita: 19
+dimension <node> (61)
+    à esquerda: 24, à direita: 26 27
+escalar <node> (62)
+    à esquerda: 25, à direita: 7 10
+vetorial <node> (63)
+    à esquerda: 26, à direita: 8 11
+matricial <node> (64)
+    à esquerda: 27, à direita: 9 12
+vector_literal <node> (65)
+    à esquerda: 28 29, à direita: 11 31 32
+matrix_literal <node> (66)
+    à esquerda: 30 31 32, à direita: 12 30 31
+literals <node> (67)
+    à esquerda: 33 34, à direita: 28 34
+matematical <node> (68)
+    à esquerda: 35 36 37 38 39 40, à direita: 20 21 22 23
+literal <node> (69)
+    à esquerda: 41 42, à direita: 10 20 22 23 33 34
+lit_none <node> (70)
+    à esquerda: 43, à direita: 29
+type <node> (71)
+    à esquerda: 44 45, à direita: 25 26 27
+
+
+Estado 0
+
+    0 $accept: . code $end
+
+    TINT   deslocar, e ir ao estado 1
+    TREAL  deslocar, e ir ao estado 2
+
+    code         ir ao estado 3
+    declaracoes  ir ao estado 4
+    declaracao   ir ao estado 5
+    escalar      ir ao estado 6
+    vetorial     ir ao estado 7
+    matricial    ir ao estado 8
+    type         ir ao estado 9
+
+
+Estado 1
+
+   44 type: TINT .
+
+    $padrão  reduzir usando a regra 44 (type)
+
+
+Estado 2
+
+   45 type: TREAL .
+
+    $padrão  reduzir usando a regra 45 (type)
+
+
+Estado 3
+
+    0 $accept: code . $end
+
+    $end  deslocar, e ir ao estado 10
+
+
+Estado 4
+
+    1 code: declaracoes . nlines acoes nlines
+    2     | declaracoes . nlines
+    6 declaracoes: declaracoes . nlines declaracao
+
+    NLINE  deslocar, e ir ao estado 11
+
+    nlines  ir ao estado 12
+
+
+Estado 5
+
+    5 declaracoes: declaracao .
+
+    $padrão  reduzir usando a regra 5 (declaracoes)
+
+
+Estado 6
+
+    7 declaracao: escalar .
+   10           | escalar . atribuition literal
+
+    SPACE  deslocar, e ir ao estado 13
+
+    $padrão  reduzir usando a regra 7 (declaracao)
+
+    atribuition  ir ao estado 14
+
+
+Estado 7
+
+    8 declaracao: vetorial .
+   11           | vetorial . atribuition vector_literal
+
+    SPACE  deslocar, e ir ao estado 13
+
+    $padrão  reduzir usando a regra 8 (declaracao)
+
+    atribuition  ir ao estado 15
+
+
+Estado 8
+
+    9 declaracao: matricial .
+   12           | matricial . atribuition matrix_literal
+
+    SPACE  deslocar, e ir ao estado 13
+
+    $padrão  reduzir usando a regra 9 (declaracao)
+
+    atribuition  ir ao estado 16
+
+
+Estado 9
+
+   25 escalar: type . SPACE ID
+   26 vetorial: type . SPACE ID dimension
+   27 matricial: type . SPACE ID dimension dimension
+
+    SPACE  deslocar, e ir ao estado 17
+
+
+Estado 10
+
+    0 $accept: code $end .
+
+    $padrão  aceitar
+
+
+Estado 11
+
+    3 nlines: NLINE .
+
+    $padrão  reduzir usando a regra 3 (nlines)
+
+
+Estado 12
+
+    1 code: declaracoes nlines . acoes nlines
+    2     | declaracoes nlines .
+    4 nlines: nlines . NLINE
+    6 declaracoes: declaracoes nlines . declaracao
+
+    TINT          deslocar, e ir ao estado 1
+    TREAL         deslocar, e ir ao estado 2
+    OPARENTHESIS  deslocar, e ir ao estado 18
+    NLINE         deslocar, e ir ao estado 19
+    ID            deslocar, e ir ao estado 20
+    INTEGER       deslocar, e ir ao estado 21
+    REAL          deslocar, e ir ao estado 22
+
+    $padrão  reduzir usando a regra 2 (code)
+
+    declaracao  ir ao estado 23
+    acoes       ir ao estado 24
+    acao        ir ao estado 25
+    expr        ir ao estado 26
+    mate_expr   ir ao estado 27
+    escalar     ir ao estado 6
+    vetorial    ir ao estado 7
+    matricial   ir ao estado 8
+    literal     ir ao estado 28
+    type        ir ao estado 9
+
+
+Estado 13
+
+   13 atribuition: SPACE . ATRIBUITION SPACE
+
+    ATRIBUITION  deslocar, e ir ao estado 29
+
+
+Estado 14
+
+   10 declaracao: escalar atribuition . literal
+
+    INTEGER  deslocar, e ir ao estado 21
+    REAL     deslocar, e ir ao estado 22
+
+    literal  ir ao estado 30
+
+
+Estado 15
+
+   11 declaracao: vetorial atribuition . vector_literal
+
+    NONE       deslocar, e ir ao estado 31
+    OCBRACKET  deslocar, e ir ao estado 32
+
+    vector_literal  ir ao estado 33
+    lit_none        ir ao estado 34
+
+
+Estado 16
+
+   12 declaracao: matricial atribuition . matrix_literal
+
+    NONE       deslocar, e ir ao estado 31
+    OCBRACKET  deslocar, e ir ao estado 35
+
+    vector_literal  ir ao estado 36
+    matrix_literal  ir ao estado 37
+    lit_none        ir ao estado 34
+
+
+Estado 17
+
+   25 escalar: type SPACE . ID
+   26 vetorial: type SPACE . ID dimension
+   27 matricial: type SPACE . ID dimension dimension
+
+    ID  deslocar, e ir ao estado 38
+
+
+Estado 18
+
+   18 expr: OPARENTHESIS . SPACE expr SPACE CPARENTHESIS
+
+    SPACE  deslocar, e ir ao estado 39
+
+
+Estado 19
+
+    4 nlines: nlines NLINE .
+
+    $padrão  reduzir usando a regra 4 (nlines)
+
+
+Estado 20
+
+   16 acao: ID . atribuition expr
+   21 mate_expr: ID . SPACE matematical SPACE ID
+   23          | ID . SPACE matematical SPACE literal
+
+    SPACE  deslocar, e ir ao estado 40
+
+    atribuition  ir ao estado 41
+
+
+Estado 21
+
+   41 literal: INTEGER .
+
+    $padrão  reduzir usando a regra 41 (literal)
+
+
+Estado 22
+
+   42 literal: REAL .
+
+    $padrão  reduzir usando a regra 42 (literal)
+
+
+Estado 23
+
+    6 declaracoes: declaracoes nlines declaracao .
+
+    $padrão  reduzir usando a regra 6 (declaracoes)
+
+
+Estado 24
+
+    1 code: declaracoes nlines acoes . nlines
+   15 acoes: acoes . nlines acao
+
+    NLINE  deslocar, e ir ao estado 11
+
+    nlines  ir ao estado 42
+
+
+Estado 25
+
+   14 acoes: acao .
+
+    $padrão  reduzir usando a regra 14 (acoes)
+
+
+Estado 26
+
+   17 acao: expr .
+
+    $padrão  reduzir usando a regra 17 (acao)
+
+
+Estado 27
+
+   19 expr: mate_expr .
+
+    $padrão  reduzir usando a regra 19 (expr)
+
+
+Estado 28
+
+   20 mate_expr: literal . SPACE matematical SPACE literal
+   22          | literal . SPACE matematical SPACE ID
+
+    SPACE  deslocar, e ir ao estado 43
+
+
+Estado 29
+
+   13 atribuition: SPACE ATRIBUITION . SPACE
+
+    SPACE  deslocar, e ir ao estado 44
+
+
+Estado 30
+
+   10 declaracao: escalar atribuition literal .
+
+    $padrão  reduzir usando a regra 10 (declaracao)
+
+
+Estado 31
+
+   43 lit_none: NONE .
+
+    $padrão  reduzir usando a regra 43 (lit_none)
+
+
+Estado 32
+
+   28 vector_literal: OCBRACKET . literals CCBRACKET
+
+    INTEGER  deslocar, e ir ao estado 21
+    REAL     deslocar, e ir ao estado 22
+
+    literals  ir ao estado 45
+    literal   ir ao estado 46
+
+
+Estado 33
+
+   11 declaracao: vetorial atribuition vector_literal .
+
+    $padrão  reduzir usando a regra 11 (declaracao)
+
+
+Estado 34
+
+   29 vector_literal: lit_none .
+
+    $padrão  reduzir usando a regra 29 (vector_literal)
+
+
+Estado 35
+
+   28 vector_literal: OCBRACKET . literals CCBRACKET
+   30 matrix_literal: OCBRACKET . matrix_literal CCBRACKET
+
+    NONE       deslocar, e ir ao estado 31
+    INTEGER    deslocar, e ir ao estado 21
+    REAL       deslocar, e ir ao estado 22
+    OCBRACKET  deslocar, e ir ao estado 35
+
+    vector_literal  ir ao estado 36
+    matrix_literal  ir ao estado 47
+    literals        ir ao estado 45
+    literal         ir ao estado 46
+    lit_none        ir ao estado 34
+
+
+Estado 36
+
+   32 matrix_literal: vector_literal .
+
+    $padrão  reduzir usando a regra 32 (matrix_literal)
+
+
+Estado 37
+
+   12 declaracao: matricial atribuition matrix_literal .
+   31 matrix_literal: matrix_literal . COLON vector_literal
+
+    COLON  deslocar, e ir ao estado 48
+
+    $padrão  reduzir usando a regra 12 (declaracao)
+
+
+Estado 38
+
+   25 escalar: type SPACE ID .
+   26 vetorial: type SPACE ID . dimension
+   27 matricial: type SPACE ID . dimension dimension
+
+    OBRACKET  deslocar, e ir ao estado 49
+
+    $padrão  reduzir usando a regra 25 (escalar)
+
+    dimension  ir ao estado 50
+
+
+Estado 39
+
+   18 expr: OPARENTHESIS SPACE . expr SPACE CPARENTHESIS
+
+    OPARENTHESIS  deslocar, e ir ao estado 18
+    ID            deslocar, e ir ao estado 51
+    INTEGER       deslocar, e ir ao estado 21
+    REAL          deslocar, e ir ao estado 22
+
+    expr       ir ao estado 52
+    mate_expr  ir ao estado 27
+    literal    ir ao estado 28
+
+
+Estado 40
+
+   13 atribuition: SPACE . ATRIBUITION SPACE
+   21 mate_expr: ID SPACE . matematical SPACE ID
+   23          | ID SPACE . matematical SPACE literal
+
+    SUM          deslocar, e ir ao estado 53
+    SUBTRACT     deslocar, e ir ao estado 54
+    ATRIBUITION  deslocar, e ir ao estado 29
+    MULTIPLY     deslocar, e ir ao estado 55
+    DIVIDE       deslocar, e ir ao estado 56
+    POW          deslocar, e ir ao estado 57
+    MODULUS      deslocar, e ir ao estado 58
+
+    matematical  ir ao estado 59
+
+
+Estado 41
+
+   16 acao: ID atribuition . expr
+
+    OPARENTHESIS  deslocar, e ir ao estado 18
+    ID            deslocar, e ir ao estado 51
+    INTEGER       deslocar, e ir ao estado 21
+    REAL          deslocar, e ir ao estado 22
+
+    expr       ir ao estado 60
+    mate_expr  ir ao estado 27
+    literal    ir ao estado 28
+
+
+Estado 42
+
+    1 code: declaracoes nlines acoes nlines .
+    4 nlines: nlines . NLINE
+   15 acoes: acoes nlines . acao
+
+    OPARENTHESIS  deslocar, e ir ao estado 18
+    NLINE         deslocar, e ir ao estado 19
+    ID            deslocar, e ir ao estado 20
+    INTEGER       deslocar, e ir ao estado 21
+    REAL          deslocar, e ir ao estado 22
+
+    $padrão  reduzir usando a regra 1 (code)
+
+    acao       ir ao estado 61
+    expr       ir ao estado 26
+    mate_expr  ir ao estado 27
+    literal    ir ao estado 28
+
+
+Estado 43
+
+   20 mate_expr: literal SPACE . matematical SPACE literal
+   22          | literal SPACE . matematical SPACE ID
+
+    SUM       deslocar, e ir ao estado 53
+    SUBTRACT  deslocar, e ir ao estado 54
+    MULTIPLY  deslocar, e ir ao estado 55
+    DIVIDE    deslocar, e ir ao estado 56
+    POW       deslocar, e ir ao estado 57
+    MODULUS   deslocar, e ir ao estado 58
+
+    matematical  ir ao estado 62
+
+
+Estado 44
+
+   13 atribuition: SPACE ATRIBUITION SPACE .
+
+    $padrão  reduzir usando a regra 13 (atribuition)
+
+
+Estado 45
+
+   28 vector_literal: OCBRACKET literals . CCBRACKET
+   34 literals: literals . COLON literal
+
+    COLON      deslocar, e ir ao estado 63
+    CCBRACKET  deslocar, e ir ao estado 64
+
+
+Estado 46
+
+   33 literals: literal .
+
+    $padrão  reduzir usando a regra 33 (literals)
+
+
+Estado 47
+
+   30 matrix_literal: OCBRACKET matrix_literal . CCBRACKET
+   31               | matrix_literal . COLON vector_literal
+
+    COLON      deslocar, e ir ao estado 48
+    CCBRACKET  deslocar, e ir ao estado 65
+
+
+Estado 48
+
+   31 matrix_literal: matrix_literal COLON . vector_literal
+
+    NONE       deslocar, e ir ao estado 31
+    OCBRACKET  deslocar, e ir ao estado 32
+
+    vector_literal  ir ao estado 66
+    lit_none        ir ao estado 34
+
+
+Estado 49
+
+   24 dimension: OBRACKET . INTEGER CBRACKET
+
+    INTEGER  deslocar, e ir ao estado 67
+
+
+Estado 50
+
+   26 vetorial: type SPACE ID dimension .
+   27 matricial: type SPACE ID dimension . dimension
+
+    OBRACKET  deslocar, e ir ao estado 49
+
+    $padrão  reduzir usando a regra 26 (vetorial)
+
+    dimension  ir ao estado 68
+
+
+Estado 51
+
+   21 mate_expr: ID . SPACE matematical SPACE ID
+   23          | ID . SPACE matematical SPACE literal
+
+    SPACE  deslocar, e ir ao estado 69
+
+
+Estado 52
+
+   18 expr: OPARENTHESIS SPACE expr . SPACE CPARENTHESIS
+
+    SPACE  deslocar, e ir ao estado 70
+
+
+Estado 53
+
+   35 matematical: SUM .
+
+    $padrão  reduzir usando a regra 35 (matematical)
+
+
+Estado 54
+
+   36 matematical: SUBTRACT .
+
+    $padrão  reduzir usando a regra 36 (matematical)
+
+
+Estado 55
+
+   37 matematical: MULTIPLY .
+
+    $padrão  reduzir usando a regra 37 (matematical)
+
+
+Estado 56
+
+   38 matematical: DIVIDE .
+
+    $padrão  reduzir usando a regra 38 (matematical)
+
+
+Estado 57
+
+   39 matematical: POW .
+
+    $padrão  reduzir usando a regra 39 (matematical)
+
+
+Estado 58
+
+   40 matematical: MODULUS .
+
+    $padrão  reduzir usando a regra 40 (matematical)
+
+
+Estado 59
+
+   21 mate_expr: ID SPACE matematical . SPACE ID
+   23          | ID SPACE matematical . SPACE literal
+
+    SPACE  deslocar, e ir ao estado 71
+
+
+Estado 60
+
+   16 acao: ID atribuition expr .
+
+    $padrão  reduzir usando a regra 16 (acao)
+
+
+Estado 61
+
+   15 acoes: acoes nlines acao .
+
+    $padrão  reduzir usando a regra 15 (acoes)
+
+
+Estado 62
+
+   20 mate_expr: literal SPACE matematical . SPACE literal
+   22          | literal SPACE matematical . SPACE ID
+
+    SPACE  deslocar, e ir ao estado 72
+
+
+Estado 63
+
+   34 literals: literals COLON . literal
+
+    INTEGER  deslocar, e ir ao estado 21
+    REAL     deslocar, e ir ao estado 22
+
+    literal  ir ao estado 73
+
+
+Estado 64
+
+   28 vector_literal: OCBRACKET literals CCBRACKET .
+
+    $padrão  reduzir usando a regra 28 (vector_literal)
+
+
+Estado 65
+
+   30 matrix_literal: OCBRACKET matrix_literal CCBRACKET .
+
+    $padrão  reduzir usando a regra 30 (matrix_literal)
+
+
+Estado 66
+
+   31 matrix_literal: matrix_literal COLON vector_literal .
+
+    $padrão  reduzir usando a regra 31 (matrix_literal)
+
+
+Estado 67
+
+   24 dimension: OBRACKET INTEGER . CBRACKET
+
+    CBRACKET  deslocar, e ir ao estado 74
+
+
+Estado 68
+
+   27 matricial: type SPACE ID dimension dimension .
+
+    $padrão  reduzir usando a regra 27 (matricial)
+
+
+Estado 69
+
+   21 mate_expr: ID SPACE . matematical SPACE ID
+   23          | ID SPACE . matematical SPACE literal
+
+    SUM       deslocar, e ir ao estado 53
+    SUBTRACT  deslocar, e ir ao estado 54
+    MULTIPLY  deslocar, e ir ao estado 55
+    DIVIDE    deslocar, e ir ao estado 56
+    POW       deslocar, e ir ao estado 57
+    MODULUS   deslocar, e ir ao estado 58
+
+    matematical  ir ao estado 59
+
+
+Estado 70
+
+   18 expr: OPARENTHESIS SPACE expr SPACE . CPARENTHESIS
+
+    CPARENTHESIS  deslocar, e ir ao estado 75
+
+
+Estado 71
+
+   21 mate_expr: ID SPACE matematical SPACE . ID
+   23          | ID SPACE matematical SPACE . literal
+
+    ID       deslocar, e ir ao estado 76
+    INTEGER  deslocar, e ir ao estado 21
+    REAL     deslocar, e ir ao estado 22
+
+    literal  ir ao estado 77
+
+
+Estado 72
+
+   20 mate_expr: literal SPACE matematical SPACE . literal
+   22          | literal SPACE matematical SPACE . ID
+
+    ID       deslocar, e ir ao estado 78
+    INTEGER  deslocar, e ir ao estado 21
+    REAL     deslocar, e ir ao estado 22
+
+    literal  ir ao estado 79
+
+
+Estado 73
+
+   34 literals: literals COLON literal .
+
+    $padrão  reduzir usando a regra 34 (literals)
+
+
+Estado 74
+
+   24 dimension: OBRACKET INTEGER CBRACKET .
+
+    $padrão  reduzir usando a regra 24 (dimension)
+
+
+Estado 75
+
+   18 expr: OPARENTHESIS SPACE expr SPACE CPARENTHESIS .
+
+    $padrão  reduzir usando a regra 18 (expr)
+
+
+Estado 76
+
+   21 mate_expr: ID SPACE matematical SPACE ID .
+
+    $padrão  reduzir usando a regra 21 (mate_expr)
+
+
+Estado 77
+
+   23 mate_expr: ID SPACE matematical SPACE literal .
+
+    $padrão  reduzir usando a regra 23 (mate_expr)
+
+
+Estado 78
+
+   22 mate_expr: literal SPACE matematical SPACE ID .
+
+    $padrão  reduzir usando a regra 22 (mate_expr)
+
+
+Estado 79
+
+   20 mate_expr: literal SPACE matematical SPACE literal .
+
+    $padrão  reduzir usando a regra 20 (mate_expr)

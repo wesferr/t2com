@@ -175,6 +175,14 @@ integer 			[+|-]?{digit}+
 								yylval.token = create_node(NONE, yytext, NULL);
 								return NONE;
 							}
+"true"				{
+								yylval.token = create_node(TRUE, yytext, NULL);
+								return TRUE;
+							}
+"false"				{
+								yylval.token = create_node(FALSE, yytext, NULL);
+								return FALSE;
+							}
 {space}				{
 								yylval.token = create_node(SPACE, yytext, NULL);
 								return SPACE;

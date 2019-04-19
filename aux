@@ -4,7 +4,7 @@ if ( a == PI )
   real modelo = model + view + projection
 end
 
-bexpr vexpr mexpr 
+bexpr vexpr mexpr
 
 | bexpr {$$ = create_node(expr_node, NULL, $1, NULL);}
 | vexpr {$$ = create_node(expr_node, NULL, $1, NULL);}

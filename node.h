@@ -30,10 +30,12 @@
 #define vetorial_node 110
 #define escalar_node 111
 #define expr_node 112
-#define bexpr_node 113
-#define sexpr_node 114
-#define vexpr_node 115
-#define acoes_node 116
+#define mate_expr_node 113
+#define bool_expr_node 114
+#define sexpr_node 115
+#define vexpr_node 116
+#define acoes_node 117
+#define acao_node 118
 
 
 typedef int Node_type;
