@@ -1,0 +1,32 @@
+
+if ( a == PI )
+  real modelo = model * view * projection
+  real modelo = model + view + projection
+end
+
+bexpr vexpr mexpr 
+
+| bexpr {$$ = create_node(expr_node, NULL, $1, NULL);}
+| vexpr {$$ = create_node(expr_node, NULL, $1, NULL);}
+| mexpr {$$ = create_node(expr_node, NULL, $1, NULL);}
+
+bexpr: bexpr SPACE EQ SPACE bexpr {$$ = create_node(bexpr_node, NULL, $1, $2, $3, $4, $5, NULL);}
+     | bexpr SPACE NE SPACE bexpr {$$ = create_node(bexpr_node, NULL, $1, $2, $3, $4, $5, NULL);}
+     | bexpr SPACE GT SPACE bexpr {$$ = create_node(bexpr_node, NULL, $1, $2, $3, $4, $5, NULL);}
+     | bexpr SPACE GE SPACE bexpr {$$ = create_node(bexpr_node, NULL, $1, $2, $3, $4, $5, NULL);}
+     | bexpr SPACE LT SPACE bexpr {$$ = create_node(bexpr_node, NULL, $1, $2, $3, $4, $5, NULL);}
+     | bexpr SPACE LE SPACE bexpr {$$ = create_node(bexpr_node, NULL, $1, $2, $3, $4, $5, NULL);}
+     | bexpr SPACE AND SPACE bexpr {$$ = create_node(bexpr_node, NULL, $1, $2, $3, $4, $5, NULL);}
+     | bexpr SPACE OR SPACE bexpr {$$ = create_node(bexpr_node, NULL, $1, $2, $3, $4, $5, NULL);}
+     | OPARENTHESIS bexpr CPARENTHESIS { $$ = create_node(bexpr_node, NULL, $1, $2, $3, NULL); }
+     | TRUE {$$ = create_node(bexpr_node, NULL, $1, NULL);}
+     | FALSE{$$ = create_node(bexpr_node, NULL, $1, NULL);}
+     ;
+
+vexpr: vexpr SPACE CPRODUCT SPACE vexpr {$$ = create_node(vexpr_node, NULL, $1, $2, $3, $4, $5, NULL);}
+     | vexpr SPACE SPRODUCT SPACE vexpr {$$ = create_node(vexpr_node, NULL, $1, $2, $3, $4, $5, NULL);}
+     | OPARENTHESIS vexpr CPARENTHESIS { $$ = create_node(vexpr_node, NULL, $1, $2, $3, NULL); }
+
+mexpr: mexpr SPACE TMATRIX SPACE mexpr {$$ = create_node(mexpr_node, NULL, $1, $2, $3, $4, $5, NULL);}
+     | mexpr SPACE IMATRIX SPACE mexpr {$$ = create_node(mexpr_node, NULL, $1, $2, $3, $4, $5, NULL);}
+     | OPARENTHESIS vexpr CPARENTHESIS { $$ = create_node(mexpr_node, NULL, $1, $2, $3, NULL); }
