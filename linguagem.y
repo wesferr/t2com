@@ -22,11 +22,10 @@ SUBTRACT MULTIPLY DIVIDE POW MODULUS CPRODUCT SPRODUCT TMATRIX IMATRIX EQ NE
 GT GE LT LE INCREMENT DECREMENT NONE NLINE ID INTEGER REAL ERROR
 OCBRACKET CCBRACKET TRUE FALSE AND OR
 
-%type<node> code declaracao dimension literal
-literal_list vector_literal nlines escalar vetorial matrix_literal
-matricial type lit_none operacao stmts stmt declaracao_escalar
-declaracao_vetorial declaracao_matricial teste conta booleano matematica
-exprecao estrutura lit_logical
+%type<node> code declaracao dimension literal literal_list vector_literal stmt
+nlines escalar vetorial matrix_literal matricial type lit_none operacao stmts
+declaracao_escalar declaracao_vetorial declaracao_matricial teste conta booleano
+matematica exprecao estrutura lit_logical structureif structureelif structureelse
 
 %start code
 
@@ -87,6 +86,10 @@ operacao: declaracao_escalar ATRIBUITION literal
             { $$ = create_node(escalar_node, NULL, $1, $2, $3, NULL); }
         | declaracao_matricial ATRIBUITION matrix_literal
             { $$ = create_node(escalar_node, NULL, $1, $2, $3, NULL); };
+        | ID INCREMENT
+            { $$ = create_node(escalar_node, NULL, $1, $2, NULL); };
+        | ID DECREMENT
+            { $$ = create_node(escalar_node, NULL, $1, $2, NULL); };
         | teste
             { $$ = create_node(literals_node, NULL, $1, NULL); };
         | conta
@@ -129,8 +132,22 @@ matematica: SUM { $$ = $1; }
 
 // ESTRUTURA DAS ESTRUTURAS(CONTROLE E REPETIÇÃO)
 
-estrutura:IF exprecao nlines stmts nlines END
-            { $$ = create_node(vetorial_node, NULL, $1, $2, $3, $4, $5, $6, NULL); };
+estrutura:structureif END
+            { $$ = create_node(literals_node, NULL, $1, $2, NULL); }
+         |structureif structureelif END
+            { $$ = create_node(literals_node, NULL, $1, $2, $3, NULL); }
+         |structureif structureelif structureelse END
+            { $$ = create_node(literals_node, NULL, $1, $2, $3, $4, NULL); }
+
+structureif:IF OPARENTHESIS exprecao CPARENTHESIS nlines stmts nlines
+              { $$ = create_node(vetorial_node, NULL, $1, $2, $3, $4, $5, $6, $7, NULL); };
+
+structureelif:ELIF OPARENTHESIS exprecao CPARENTHESIS nlines stmts nlines
+                { $$ = create_node(vetorial_node, NULL, $1, $2, $3, $4, $5, $6, $7, NULL); };
+
+structureelse: ELSE nlines stmts nlines
+                { $$ = create_node(vetorial_node, NULL, $1, $2, $3, $4, NULL); };
+
 
 //ESTRUTURA DOS LITERAIS E TIPOS
 

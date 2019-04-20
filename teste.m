@@ -13,4 +13,8 @@ real projection[4][4] = none
 if ( a == PI )
   real modelo = model * view * projection
   real modelo = model + view + projection
+elif (a==b)
+  a++
+else
+  b++
 end
