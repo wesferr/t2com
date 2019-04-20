@@ -19,13 +19,13 @@
 %token<node> PRINT IF ELSE ELIF WHILE FOR END TINT TREAL SEMICOLON
 OPARENTHESIS CPARENTHESIS OBRACKET CBRACKET COLON NEGATION ATRIBUITION SUM
 SUBTRACT MULTIPLY DIVIDE POW MODULUS CPRODUCT SPRODUCT TMATRIX IMATRIX EQ NE
-GT GE LT LE INCREMENT DECREMENT NONE SPACE NLINE ID INTEGER REAL ERROR
+GT GE LT LE INCREMENT DECREMENT NONE NLINE ID INTEGER REAL ERROR
 OCBRACKET CCBRACKET TRUE FALSE AND OR
 
-%type<node> code declaracao dimension literal atribuition
+%type<node> code declaracao dimension literal
 literal_list vector_literal nlines escalar vetorial matrix_literal
 matricial type lit_none operacao stmts stmt declaracao_escalar
-declaracao_vetorial declaracao_matricial
+declaracao_vetorial declaracao_matricial teste conta booleano matematica exprecao
 
 %start code
 
@@ -48,7 +48,6 @@ stmts:stmt
 
 stmt: declaracao
         { $$ = create_node(literals_node, NULL, $1, NULL); }
-    // | funcao
     | operacao
         { $$ = create_node(literals_node, NULL, $1, NULL); };
 
@@ -77,52 +76,61 @@ declaracao_matricial: matricial
 
 // ESTRUTURA DAS OPERACOES
 
-atribuition:ATRIBUITION
-              { $$ = $1; }
-           |SPACE ATRIBUITION SPACE
-              { $$ = create_node(escalar_node, NULL, $1, $2, $3, NULL); };
+operacao: declaracao_escalar ATRIBUITION literal
+            { $$ = create_node(escalar_node, NULL, $1, $2, $3, NULL); }
+        | declaracao_vetorial ATRIBUITION vector_literal
+            { $$ = create_node(escalar_node, NULL, $1, $2, $3, NULL); }
+        | declaracao_matricial ATRIBUITION matrix_literal
+            { $$ = create_node(escalar_node, NULL, $1, $2, $3, NULL); };
+        | teste
+            { $$ = create_node(literals_node, NULL, $1, NULL); };
+        | conta
+            { $$ = create_node(literals_node, NULL, $1, NULL); };
 
-operacao: declaracao_escalar atribuition literal
-                                  { $$ = create_node(escalar_node, NULL, $1, $2, $3, NULL); }
-        | declaracao_vetorial atribuition vector_literal
-                                  { $$ = create_node(escalar_node, NULL, $1, $2, $3, NULL); }
-        | declaracao_matricial atribuition matrix_literal
-                                  { $$ = create_node(escalar_node, NULL, $1, $2, $3, NULL); };
-//         | teste
-//         | conta
-//
-// teste:exprecao booleano exprecao
-//         { $$ = create_node(escalar_node, NULL, $1, $2, $3, NULL); };
-// conta:exprecao matematica exprecao
-//         { $$ = create_node(escalar_node, NULL, $1, $2, $3, NULL); };
-//
-// booleano: EQ { $$ = $1; }
-//         | NE { $$ = $1; }
-//         | GT { $$ = $1; }
-//         | GE { $$ = $1; }
-//         | LT { $$ = $1; }
-//         | LE { $$ = $1; }
-//
-// matematica: SUM { $$ = $1; }
-//           | SUBTRACT { $$ = $1; }
-//           | MULTIPLY { $$ = $1; }
-//           | DIVIDE { $$ = $1; }
-//           | POW { $$ = $1; }
-//           | MODULUS { $$ = $1; };
+exprecao: literal
+            { $$ = create_node(literals_node, NULL, $1, NULL); }
+        | operacao
+            { $$ = create_node(literals_node, NULL, $1, NULL); }
+        | ID
+            { $$ = $1; };
+
+teste:exprecao booleano exprecao
+        { $$ = create_node(escalar_node, NULL, $1, $2, $3, NULL); };
+     | OPARENTHESIS exprecao booleano exprecao CPARENTHESIS
+        { $$ = create_node(escalar_node, NULL, $1, $2, $3, $4, $5, NULL); };
+
+conta:exprecao matematica exprecao
+        { $$ = create_node(escalar_node, NULL, $1, $2, $3, NULL); };
+     | OPARENTHESIS exprecao matematica exprecao CPARENTHESIS
+        { $$ = create_node(escalar_node, NULL, $1, $2, $3, $4, $5, NULL); };
+
+booleano: EQ { $$ = $1; }
+        | NE { $$ = $1; }
+        | GT { $$ = $1; }
+        | GE { $$ = $1; }
+        | LT { $$ = $1; }
+        | LE { $$ = $1; }
+
+matematica: SUM { $$ = $1; }
+          | SUBTRACT { $$ = $1; }
+          | MULTIPLY { $$ = $1; }
+          | DIVIDE { $$ = $1; }
+          | POW { $$ = $1; }
+          | MODULUS { $$ = $1; };
 
 //ESTRUTURA DOS LITERAIS E TIPOS
 
 dimension:  OBRACKET INTEGER CBRACKET
               { $$ = create_node(dimension_node, NULL, $1, $2, $3, NULL); };
 
-escalar:  type SPACE ID
-            { $$ = create_node(escalar_node, NULL, $1, $2, $3, NULL); };
+escalar:  type ID
+            { $$ = create_node(escalar_node, NULL, $1, $2, NULL); };
 
-vetorial: type SPACE ID dimension
-            { $$ = create_node(vetorial_node, NULL, $1, $2, $3, $4, NULL); };
+vetorial: type ID dimension
+            { $$ = create_node(vetorial_node, NULL, $1, $2, $3, NULL); };
 
-matricial:  type SPACE ID dimension dimension
-              { $$ = create_node(vetorial_node, NULL, $1, $2, $3, $4, $5, NULL); };
+matricial:  type ID dimension dimension
+              { $$ = create_node(vetorial_node, NULL, $1, $2, $3, $4, NULL); };
 
 
 literal_list: literal

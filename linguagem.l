@@ -17,7 +17,7 @@ pownotation		({digit}+(E|e){digit})+
 fraction			("."{digit}+)|("."{pownotation})
 real 					{integer}{fraction}
 id 						({letter}|\_)({letter}|{digit}|\_)*
-integer 			[+|-]?{digit}+
+integer 			{digit}+
 
 
 %%
@@ -183,10 +183,7 @@ integer 			[+|-]?{digit}+
 								yylval.token = create_node(FALSE, yytext, NULL);
 								return FALSE;
 							}
-{space}				{
-								yylval.token = create_node(SPACE, yytext, NULL);
-								return SPACE;
-							}
+{space}				{}
 {nline}				{
 								yylval.token = create_node(NLINE, yytext, NULL);
 								return NLINE;}
