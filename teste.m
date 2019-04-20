@@ -12,9 +12,21 @@ real projection[4][4] = none
 
 if ( a == PI )
   real modelo = model * view * projection
-  real modelo = model + view + projection
 elif (a==b)
-  a++
+  a * 2
 else
-  b++
+
+  while (true)
+
+    a++
+
+  end
+
+  for (int i = 1; i < b; i++)
+
+    real contexto = scale *. rotate
+    modelo*I * contexto
+
+  end
+
 end

@@ -135,7 +135,7 @@ integer 			{digit}+
 								yylval.token = create_node(TMATRIX, yytext, NULL);
 								return TMATRIX;
 							}
-"^-1"					{
+"^I"					{
 								yylval.token = create_node(IMATRIX, yytext, NULL);
 								return IMATRIX;
 							}
