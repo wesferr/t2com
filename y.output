@@ -1,12 +1,10 @@
 Terminais sem uso na gramática
 
    PRINT
-   IF
    ELSE
    ELIF
    WHILE
    FOR
-   END
    SEMICOLON
    NEGATION
    CPRODUCT
@@ -16,16 +14,14 @@ Terminais sem uso na gramática
    INCREMENT
    DECREMENT
    ERROR
-   TRUE
-   FALSE
-   AND
-   OR
 
 
-Estado 62 conflitos: 12 de deslocamento/redução
-Estado 63 conflitos: 12 de deslocamento/redução
-Estado 66 conflitos: 12 de deslocamento/redução
-Estado 67 conflitos: 12 de deslocamento/redução
+Estado 64 conflitos: 14 de deslocamento/redução
+Estado 65 conflitos: 25 de redução/redução
+Estado 73 conflitos: 14 de deslocamento/redução
+Estado 74 conflitos: 14 de deslocamento/redução
+Estado 78 conflitos: 14 de deslocamento/redução
+Estado 79 conflitos: 14 de deslocamento/redução
 
 
 Gramática
@@ -39,129 +35,139 @@ Gramática
     4      | stmts nlines stmt
 
     5 stmt: declaracao
-    6     | operacao
+    6     | estrutura
+    7     | operacao
 
-    7 nlines: NLINE
-    8       | nlines NLINE
+    8 nlines: NLINE
+    9       | nlines NLINE
 
-    9 declaracao: declaracao_escalar
-   10           | declaracao_vetorial
-   11           | declaracao_matricial
+   10 declaracao: declaracao_escalar
+   11           | declaracao_vetorial
+   12           | declaracao_matricial
 
-   12 declaracao_escalar: escalar
+   13 declaracao_escalar: escalar
 
-   13 declaracao_vetorial: vetorial
+   14 declaracao_vetorial: vetorial
 
-   14 declaracao_matricial: matricial
+   15 declaracao_matricial: matricial
 
-   15 operacao: declaracao_escalar ATRIBUITION literal
-   16         | declaracao_vetorial ATRIBUITION vector_literal
-   17         | declaracao_matricial ATRIBUITION matrix_literal
-   18         | teste
-   19         | conta
+   16 operacao: declaracao_escalar ATRIBUITION literal
+   17         | declaracao_escalar ATRIBUITION exprecao
+   18         | declaracao_vetorial ATRIBUITION vector_literal
+   19         | declaracao_matricial ATRIBUITION matrix_literal
+   20         | teste
+   21         | conta
 
-   20 exprecao: literal
-   21         | operacao
-   22         | ID
+   22 exprecao: literal
+   23         | lit_logical
+   24         | operacao
+   25         | ID
 
-   23 teste: exprecao booleano exprecao
-   24      | OPARENTHESIS exprecao booleano exprecao CPARENTHESIS
+   26 teste: exprecao booleano exprecao
+   27      | OPARENTHESIS exprecao booleano exprecao CPARENTHESIS
 
-   25 conta: exprecao matematica exprecao
-   26      | OPARENTHESIS exprecao matematica exprecao CPARENTHESIS
+   28 conta: exprecao matematica exprecao
+   29      | OPARENTHESIS exprecao matematica exprecao CPARENTHESIS
 
-   27 booleano: EQ
-   28         | NE
-   29         | GT
-   30         | GE
-   31         | LT
-   32         | LE
+   30 booleano: EQ
+   31         | NE
+   32         | GT
+   33         | GE
+   34         | LT
+   35         | LE
+   36         | AND
+   37         | OR
 
-   33 matematica: SUM
-   34           | SUBTRACT
-   35           | MULTIPLY
-   36           | DIVIDE
-   37           | POW
-   38           | MODULUS
+   38 matematica: SUM
+   39           | SUBTRACT
+   40           | MULTIPLY
+   41           | DIVIDE
+   42           | POW
+   43           | MODULUS
 
-   39 dimension: OBRACKET INTEGER CBRACKET
+   44 estrutura: IF exprecao nlines stmts nlines END
 
-   40 escalar: type ID
+   45 dimension: OBRACKET INTEGER CBRACKET
 
-   41 vetorial: type ID dimension
+   46 escalar: type ID
 
-   42 matricial: type ID dimension dimension
+   47 vetorial: type ID dimension
 
-   43 literal_list: literal
-   44             | literal_list COLON literal
+   48 matricial: type ID dimension dimension
 
-   45 vector_literal: OCBRACKET literal_list CCBRACKET
-   46               | lit_none
+   49 literal_list: literal
+   50             | literal_list COLON literal
 
-   47 matrix_literal: vector_literal
-   48               | OCBRACKET matrix_literal CCBRACKET
-   49               | matrix_literal COLON vector_literal
+   51 vector_literal: OCBRACKET literal_list CCBRACKET
+   52               | lit_none
 
-   50 lit_none: NONE
+   53 matrix_literal: vector_literal
+   54               | OCBRACKET matrix_literal CCBRACKET
+   55               | matrix_literal COLON vector_literal
 
-   51 literal: INTEGER
-   52        | REAL
+   56 lit_none: NONE
 
-   53 type: TINT
-   54     | TREAL
+   57 lit_logical: TRUE
+   58            | FALSE
+
+   59 literal: INTEGER
+   60        | REAL
+
+   61 type: TINT
+   62     | TREAL
 
 
 Terminais, com as regras onde eles aparecem
 
 $end (0) 0
 error (256)
-SUM <node> (258) 33
-SUBTRACT <node> (259) 34
+SUM <node> (258) 38
+SUBTRACT <node> (259) 39
 PRINT <node> (260)
-IF <node> (261)
+IF <node> (261) 44
 ELSE <node> (262)
 ELIF <node> (263)
 WHILE <node> (264)
 FOR <node> (265)
-END <node> (266)
-TINT <node> (267) 53
-TREAL <node> (268) 54
+END <node> (266) 44
+TINT <node> (267) 61
+TREAL <node> (268) 62
 SEMICOLON <node> (269)
-OPARENTHESIS <node> (270) 24 26
-CPARENTHESIS <node> (271) 24 26
-OBRACKET <node> (272) 39
-CBRACKET <node> (273) 39
-COLON <node> (274) 44 49
+OPARENTHESIS <node> (270) 27 29
+CPARENTHESIS <node> (271) 27 29
+OBRACKET <node> (272) 45
+CBRACKET <node> (273) 45
+COLON <node> (274) 50 55
 NEGATION <node> (275)
-ATRIBUITION <node> (276) 15 16 17
-MULTIPLY <node> (277) 35
-DIVIDE <node> (278) 36
-POW <node> (279) 37
-MODULUS <node> (280) 38
+ATRIBUITION <node> (276) 16 17 18 19
+MULTIPLY <node> (277) 40
+DIVIDE <node> (278) 41
+POW <node> (279) 42
+MODULUS <node> (280) 43
 CPRODUCT <node> (281)
 SPRODUCT <node> (282)
 TMATRIX <node> (283)
 IMATRIX <node> (284)
-EQ <node> (285) 27
-NE <node> (286) 28
-GT <node> (287) 29
-GE <node> (288) 30
-LT <node> (289) 31
-LE <node> (290) 32
+EQ <node> (285) 30
+NE <node> (286) 31
+GT <node> (287) 32
+GE <node> (288) 33
+LT <node> (289) 34
+LE <node> (290) 35
 INCREMENT <node> (291)
 DECREMENT <node> (292)
-NONE <node> (293) 50
-NLINE <node> (294) 1 7 8
-ID <node> (295) 22 40 41 42
-INTEGER <node> (296) 39 51
-REAL <node> (297) 52
+NONE <node> (293) 56
+NLINE <node> (294) 1 8 9
+ID <node> (295) 25 46 47 48
+INTEGER <node> (296) 45 59
+REAL <node> (297) 60
 ERROR <node> (298)
-OCBRACKET <node> (299) 45 48
-CCBRACKET <node> (300) 45 48
-TRUE <node> (301)
-FALSE <node> (302)
-AND <node> (303)
-OR <node> (304)
+OCBRACKET <node> (299) 51 54
+CCBRACKET <node> (300) 51 54
+TRUE <node> (301) 57
+FALSE <node> (302) 58
+AND <node> (303) 36
+OR <node> (304) 37
 
 
 Não terminais com as regras onde eles aparecem
@@ -171,1009 +177,1397 @@ $accept (50)
 code <node> (51)
     à esquerda: 1, à direita: 0
 stmts <node> (52)
-    à esquerda: 2 3 4, à direita: 1 3 4
+    à esquerda: 2 3 4, à direita: 1 3 4 44
 stmt <node> (53)
-    à esquerda: 5 6, à direita: 2 3 4
+    à esquerda: 5 6 7, à direita: 2 3 4
 nlines <node> (54)
-    à esquerda: 7 8, à direita: 4 8
+    à esquerda: 8 9, à direita: 4 9 44
 declaracao <node> (55)
-    à esquerda: 9 10 11, à direita: 5
+    à esquerda: 10 11 12, à direita: 5
 declaracao_escalar <node> (56)
-    à esquerda: 12, à direita: 9 15
+    à esquerda: 13, à direita: 10 16 17
 declaracao_vetorial <node> (57)
-    à esquerda: 13, à direita: 10 16
+    à esquerda: 14, à direita: 11 18
 declaracao_matricial <node> (58)
-    à esquerda: 14, à direita: 11 17
+    à esquerda: 15, à direita: 12 19
 operacao <node> (59)
-    à esquerda: 15 16 17 18 19, à direita: 6 21
+    à esquerda: 16 17 18 19 20 21, à direita: 7 24
 exprecao <node> (60)
-    à esquerda: 20 21 22, à direita: 23 24 25 26
+    à esquerda: 22 23 24 25, à direita: 17 26 27 28 29 44
 teste <node> (61)
-    à esquerda: 23 24, à direita: 18
+    à esquerda: 26 27, à direita: 20
 conta <node> (62)
-    à esquerda: 25 26, à direita: 19
+    à esquerda: 28 29, à direita: 21
 booleano <node> (63)
-    à esquerda: 27 28 29 30 31 32, à direita: 23 24
+    à esquerda: 30 31 32 33 34 35 36 37, à direita: 26 27
 matematica <node> (64)
-    à esquerda: 33 34 35 36 37 38, à direita: 25 26
-dimension <node> (65)
-    à esquerda: 39, à direita: 41 42
-escalar <node> (66)
-    à esquerda: 40, à direita: 12
-vetorial <node> (67)
-    à esquerda: 41, à direita: 13
-matricial <node> (68)
-    à esquerda: 42, à direita: 14
-literal_list <node> (69)
-    à esquerda: 43 44, à direita: 44 45
-vector_literal <node> (70)
-    à esquerda: 45 46, à direita: 16 47 49
-matrix_literal <node> (71)
-    à esquerda: 47 48 49, à direita: 17 48 49
-lit_none <node> (72)
-    à esquerda: 50, à direita: 46
-literal <node> (73)
-    à esquerda: 51 52, à direita: 15 20 43 44
-type <node> (74)
-    à esquerda: 53 54, à direita: 40 41 42
+    à esquerda: 38 39 40 41 42 43, à direita: 28 29
+estrutura <node> (65)
+    à esquerda: 44, à direita: 6
+dimension <node> (66)
+    à esquerda: 45, à direita: 47 48
+escalar <node> (67)
+    à esquerda: 46, à direita: 13
+vetorial <node> (68)
+    à esquerda: 47, à direita: 14
+matricial <node> (69)
+    à esquerda: 48, à direita: 15
+literal_list <node> (70)
+    à esquerda: 49 50, à direita: 50 51
+vector_literal <node> (71)
+    à esquerda: 51 52, à direita: 18 53 55
+matrix_literal <node> (72)
+    à esquerda: 53 54 55, à direita: 19 54 55
+lit_none <node> (73)
+    à esquerda: 56, à direita: 52
+lit_logical <node> (74)
+    à esquerda: 57 58, à direita: 23
+literal <node> (75)
+    à esquerda: 59 60, à direita: 16 22 49 50
+type <node> (76)
+    à esquerda: 61 62, à direita: 46 47 48
 
 
 Estado 0
 
     0 $accept: . code $end
 
-    TINT          deslocar, e ir ao estado 1
-    TREAL         deslocar, e ir ao estado 2
-    OPARENTHESIS  deslocar, e ir ao estado 3
-    ID            deslocar, e ir ao estado 4
-    INTEGER       deslocar, e ir ao estado 5
-    REAL          deslocar, e ir ao estado 6
+    IF            deslocar, e ir ao estado 1
+    TINT          deslocar, e ir ao estado 2
+    TREAL         deslocar, e ir ao estado 3
+    OPARENTHESIS  deslocar, e ir ao estado 4
+    ID            deslocar, e ir ao estado 5
+    INTEGER       deslocar, e ir ao estado 6
+    REAL          deslocar, e ir ao estado 7
+    TRUE          deslocar, e ir ao estado 8
+    FALSE         deslocar, e ir ao estado 9
 
-    code                  ir ao estado 7
-    stmts                 ir ao estado 8
-    stmt                  ir ao estado 9
-    declaracao            ir ao estado 10
-    declaracao_escalar    ir ao estado 11
-    declaracao_vetorial   ir ao estado 12
-    declaracao_matricial  ir ao estado 13
-    operacao              ir ao estado 14
-    exprecao              ir ao estado 15
-    teste                 ir ao estado 16
-    conta                 ir ao estado 17
-    escalar               ir ao estado 18
-    vetorial              ir ao estado 19
-    matricial             ir ao estado 20
-    literal               ir ao estado 21
-    type                  ir ao estado 22
+    code                  ir ao estado 10
+    stmts                 ir ao estado 11
+    stmt                  ir ao estado 12
+    declaracao            ir ao estado 13
+    declaracao_escalar    ir ao estado 14
+    declaracao_vetorial   ir ao estado 15
+    declaracao_matricial  ir ao estado 16
+    operacao              ir ao estado 17
+    exprecao              ir ao estado 18
+    teste                 ir ao estado 19
+    conta                 ir ao estado 20
+    estrutura             ir ao estado 21
+    escalar               ir ao estado 22
+    vetorial              ir ao estado 23
+    matricial             ir ao estado 24
+    lit_logical           ir ao estado 25
+    literal               ir ao estado 26
+    type                  ir ao estado 27
 
 
 Estado 1
 
-   53 type: TINT .
+   44 estrutura: IF . exprecao nlines stmts nlines END
 
-    $padrão  reduzir usando a regra 53 (type)
+    TINT          deslocar, e ir ao estado 2
+    TREAL         deslocar, e ir ao estado 3
+    OPARENTHESIS  deslocar, e ir ao estado 4
+    ID            deslocar, e ir ao estado 5
+    INTEGER       deslocar, e ir ao estado 6
+    REAL          deslocar, e ir ao estado 7
+    TRUE          deslocar, e ir ao estado 8
+    FALSE         deslocar, e ir ao estado 9
+
+    declaracao_escalar    ir ao estado 28
+    declaracao_vetorial   ir ao estado 29
+    declaracao_matricial  ir ao estado 30
+    operacao              ir ao estado 31
+    exprecao              ir ao estado 32
+    teste                 ir ao estado 19
+    conta                 ir ao estado 20
+    escalar               ir ao estado 22
+    vetorial              ir ao estado 23
+    matricial             ir ao estado 24
+    lit_logical           ir ao estado 25
+    literal               ir ao estado 26
+    type                  ir ao estado 27
 
 
 Estado 2
 
-   54 type: TREAL .
+   61 type: TINT .
 
-    $padrão  reduzir usando a regra 54 (type)
+    $padrão  reduzir usando a regra 61 (type)
 
 
 Estado 3
 
-   24 teste: OPARENTHESIS . exprecao booleano exprecao CPARENTHESIS
-   26 conta: OPARENTHESIS . exprecao matematica exprecao CPARENTHESIS
+   62 type: TREAL .
 
-    TINT          deslocar, e ir ao estado 1
-    TREAL         deslocar, e ir ao estado 2
-    OPARENTHESIS  deslocar, e ir ao estado 3
-    ID            deslocar, e ir ao estado 4
-    INTEGER       deslocar, e ir ao estado 5
-    REAL          deslocar, e ir ao estado 6
-
-    declaracao_escalar    ir ao estado 23
-    declaracao_vetorial   ir ao estado 24
-    declaracao_matricial  ir ao estado 25
-    operacao              ir ao estado 26
-    exprecao              ir ao estado 27
-    teste                 ir ao estado 16
-    conta                 ir ao estado 17
-    escalar               ir ao estado 18
-    vetorial              ir ao estado 19
-    matricial             ir ao estado 20
-    literal               ir ao estado 21
-    type                  ir ao estado 22
+    $padrão  reduzir usando a regra 62 (type)
 
 
 Estado 4
 
-   22 exprecao: ID .
+   27 teste: OPARENTHESIS . exprecao booleano exprecao CPARENTHESIS
+   29 conta: OPARENTHESIS . exprecao matematica exprecao CPARENTHESIS
 
-    $padrão  reduzir usando a regra 22 (exprecao)
+    TINT          deslocar, e ir ao estado 2
+    TREAL         deslocar, e ir ao estado 3
+    OPARENTHESIS  deslocar, e ir ao estado 4
+    ID            deslocar, e ir ao estado 5
+    INTEGER       deslocar, e ir ao estado 6
+    REAL          deslocar, e ir ao estado 7
+    TRUE          deslocar, e ir ao estado 8
+    FALSE         deslocar, e ir ao estado 9
+
+    declaracao_escalar    ir ao estado 28
+    declaracao_vetorial   ir ao estado 29
+    declaracao_matricial  ir ao estado 30
+    operacao              ir ao estado 31
+    exprecao              ir ao estado 33
+    teste                 ir ao estado 19
+    conta                 ir ao estado 20
+    escalar               ir ao estado 22
+    vetorial              ir ao estado 23
+    matricial             ir ao estado 24
+    lit_logical           ir ao estado 25
+    literal               ir ao estado 26
+    type                  ir ao estado 27
 
 
 Estado 5
 
-   51 literal: INTEGER .
+   25 exprecao: ID .
 
-    $padrão  reduzir usando a regra 51 (literal)
+    $padrão  reduzir usando a regra 25 (exprecao)
 
 
 Estado 6
 
-   52 literal: REAL .
+   59 literal: INTEGER .
 
-    $padrão  reduzir usando a regra 52 (literal)
+    $padrão  reduzir usando a regra 59 (literal)
 
 
 Estado 7
 
-    0 $accept: code . $end
+   60 literal: REAL .
 
-    $end  deslocar, e ir ao estado 28
+    $padrão  reduzir usando a regra 60 (literal)
 
 
 Estado 8
+
+   57 lit_logical: TRUE .
+
+    $padrão  reduzir usando a regra 57 (lit_logical)
+
+
+Estado 9
+
+   58 lit_logical: FALSE .
+
+    $padrão  reduzir usando a regra 58 (lit_logical)
+
+
+Estado 10
+
+    0 $accept: code . $end
+
+    $end  deslocar, e ir ao estado 34
+
+
+Estado 11
 
     1 code: stmts . NLINE
     3 stmts: stmts . stmt
     4      | stmts . nlines stmt
 
-    TINT          deslocar, e ir ao estado 1
-    TREAL         deslocar, e ir ao estado 2
-    OPARENTHESIS  deslocar, e ir ao estado 3
-    NLINE         deslocar, e ir ao estado 29
-    ID            deslocar, e ir ao estado 4
-    INTEGER       deslocar, e ir ao estado 5
-    REAL          deslocar, e ir ao estado 6
+    IF            deslocar, e ir ao estado 1
+    TINT          deslocar, e ir ao estado 2
+    TREAL         deslocar, e ir ao estado 3
+    OPARENTHESIS  deslocar, e ir ao estado 4
+    NLINE         deslocar, e ir ao estado 35
+    ID            deslocar, e ir ao estado 5
+    INTEGER       deslocar, e ir ao estado 6
+    REAL          deslocar, e ir ao estado 7
+    TRUE          deslocar, e ir ao estado 8
+    FALSE         deslocar, e ir ao estado 9
 
-    stmt                  ir ao estado 30
-    nlines                ir ao estado 31
-    declaracao            ir ao estado 10
-    declaracao_escalar    ir ao estado 11
-    declaracao_vetorial   ir ao estado 12
-    declaracao_matricial  ir ao estado 13
-    operacao              ir ao estado 14
-    exprecao              ir ao estado 15
-    teste                 ir ao estado 16
-    conta                 ir ao estado 17
-    escalar               ir ao estado 18
-    vetorial              ir ao estado 19
-    matricial             ir ao estado 20
-    literal               ir ao estado 21
-    type                  ir ao estado 22
+    stmt                  ir ao estado 36
+    nlines                ir ao estado 37
+    declaracao            ir ao estado 13
+    declaracao_escalar    ir ao estado 14
+    declaracao_vetorial   ir ao estado 15
+    declaracao_matricial  ir ao estado 16
+    operacao              ir ao estado 17
+    exprecao              ir ao estado 18
+    teste                 ir ao estado 19
+    conta                 ir ao estado 20
+    estrutura             ir ao estado 21
+    escalar               ir ao estado 22
+    vetorial              ir ao estado 23
+    matricial             ir ao estado 24
+    lit_logical           ir ao estado 25
+    literal               ir ao estado 26
+    type                  ir ao estado 27
 
 
-Estado 9
+Estado 12
 
     2 stmts: stmt .
 
     $padrão  reduzir usando a regra 2 (stmts)
 
 
-Estado 10
+Estado 13
 
     5 stmt: declaracao .
 
     $padrão  reduzir usando a regra 5 (stmt)
 
 
-Estado 11
+Estado 14
 
-    9 declaracao: declaracao_escalar .
-   15 operacao: declaracao_escalar . ATRIBUITION literal
+   10 declaracao: declaracao_escalar .
+   16 operacao: declaracao_escalar . ATRIBUITION literal
+   17         | declaracao_escalar . ATRIBUITION exprecao
 
-    ATRIBUITION  deslocar, e ir ao estado 32
-
-    $padrão  reduzir usando a regra 9 (declaracao)
-
-
-Estado 12
-
-   10 declaracao: declaracao_vetorial .
-   16 operacao: declaracao_vetorial . ATRIBUITION vector_literal
-
-    ATRIBUITION  deslocar, e ir ao estado 33
+    ATRIBUITION  deslocar, e ir ao estado 38
 
     $padrão  reduzir usando a regra 10 (declaracao)
 
 
-Estado 13
+Estado 15
 
-   11 declaracao: declaracao_matricial .
-   17 operacao: declaracao_matricial . ATRIBUITION matrix_literal
+   11 declaracao: declaracao_vetorial .
+   18 operacao: declaracao_vetorial . ATRIBUITION vector_literal
 
-    ATRIBUITION  deslocar, e ir ao estado 34
+    ATRIBUITION  deslocar, e ir ao estado 39
 
     $padrão  reduzir usando a regra 11 (declaracao)
 
 
-Estado 14
-
-    6 stmt: operacao .
-   21 exprecao: operacao .
-
-    TINT          reduzir usando a regra 6 (stmt)
-    TREAL         reduzir usando a regra 6 (stmt)
-    OPARENTHESIS  reduzir usando a regra 6 (stmt)
-    NLINE         reduzir usando a regra 6 (stmt)
-    ID            reduzir usando a regra 6 (stmt)
-    INTEGER       reduzir usando a regra 6 (stmt)
-    REAL          reduzir usando a regra 6 (stmt)
-    $padrão      reduzir usando a regra 21 (exprecao)
-
-
-Estado 15
-
-   23 teste: exprecao . booleano exprecao
-   25 conta: exprecao . matematica exprecao
-
-    SUM       deslocar, e ir ao estado 35
-    SUBTRACT  deslocar, e ir ao estado 36
-    MULTIPLY  deslocar, e ir ao estado 37
-    DIVIDE    deslocar, e ir ao estado 38
-    POW       deslocar, e ir ao estado 39
-    MODULUS   deslocar, e ir ao estado 40
-    EQ        deslocar, e ir ao estado 41
-    NE        deslocar, e ir ao estado 42
-    GT        deslocar, e ir ao estado 43
-    GE        deslocar, e ir ao estado 44
-    LT        deslocar, e ir ao estado 45
-    LE        deslocar, e ir ao estado 46
-
-    booleano    ir ao estado 47
-    matematica  ir ao estado 48
-
-
 Estado 16
 
-   18 operacao: teste .
+   12 declaracao: declaracao_matricial .
+   19 operacao: declaracao_matricial . ATRIBUITION matrix_literal
 
-    $padrão  reduzir usando a regra 18 (operacao)
+    ATRIBUITION  deslocar, e ir ao estado 40
+
+    $padrão  reduzir usando a regra 12 (declaracao)
 
 
 Estado 17
 
-   19 operacao: conta .
+    7 stmt: operacao .
+   24 exprecao: operacao .
 
-    $padrão  reduzir usando a regra 19 (operacao)
+    IF            reduzir usando a regra 7 (stmt)
+    TINT          reduzir usando a regra 7 (stmt)
+    TREAL         reduzir usando a regra 7 (stmt)
+    OPARENTHESIS  reduzir usando a regra 7 (stmt)
+    NLINE         reduzir usando a regra 7 (stmt)
+    ID            reduzir usando a regra 7 (stmt)
+    INTEGER       reduzir usando a regra 7 (stmt)
+    REAL          reduzir usando a regra 7 (stmt)
+    TRUE          reduzir usando a regra 7 (stmt)
+    FALSE         reduzir usando a regra 7 (stmt)
+    $padrão      reduzir usando a regra 24 (exprecao)
 
 
 Estado 18
 
-   12 declaracao_escalar: escalar .
+   26 teste: exprecao . booleano exprecao
+   28 conta: exprecao . matematica exprecao
 
-    $padrão  reduzir usando a regra 12 (declaracao_escalar)
+    SUM       deslocar, e ir ao estado 41
+    SUBTRACT  deslocar, e ir ao estado 42
+    MULTIPLY  deslocar, e ir ao estado 43
+    DIVIDE    deslocar, e ir ao estado 44
+    POW       deslocar, e ir ao estado 45
+    MODULUS   deslocar, e ir ao estado 46
+    EQ        deslocar, e ir ao estado 47
+    NE        deslocar, e ir ao estado 48
+    GT        deslocar, e ir ao estado 49
+    GE        deslocar, e ir ao estado 50
+    LT        deslocar, e ir ao estado 51
+    LE        deslocar, e ir ao estado 52
+    AND       deslocar, e ir ao estado 53
+    OR        deslocar, e ir ao estado 54
+
+    booleano    ir ao estado 55
+    matematica  ir ao estado 56
 
 
 Estado 19
 
-   13 declaracao_vetorial: vetorial .
+   20 operacao: teste .
 
-    $padrão  reduzir usando a regra 13 (declaracao_vetorial)
+    $padrão  reduzir usando a regra 20 (operacao)
 
 
 Estado 20
 
-   14 declaracao_matricial: matricial .
+   21 operacao: conta .
 
-    $padrão  reduzir usando a regra 14 (declaracao_matricial)
+    $padrão  reduzir usando a regra 21 (operacao)
 
 
 Estado 21
 
-   20 exprecao: literal .
+    6 stmt: estrutura .
 
-    $padrão  reduzir usando a regra 20 (exprecao)
+    $padrão  reduzir usando a regra 6 (stmt)
 
 
 Estado 22
 
-   40 escalar: type . ID
-   41 vetorial: type . ID dimension
-   42 matricial: type . ID dimension dimension
+   13 declaracao_escalar: escalar .
 
-    ID  deslocar, e ir ao estado 49
+    $padrão  reduzir usando a regra 13 (declaracao_escalar)
 
 
 Estado 23
 
-   15 operacao: declaracao_escalar . ATRIBUITION literal
+   14 declaracao_vetorial: vetorial .
 
-    ATRIBUITION  deslocar, e ir ao estado 32
+    $padrão  reduzir usando a regra 14 (declaracao_vetorial)
 
 
 Estado 24
 
-   16 operacao: declaracao_vetorial . ATRIBUITION vector_literal
+   15 declaracao_matricial: matricial .
 
-    ATRIBUITION  deslocar, e ir ao estado 33
+    $padrão  reduzir usando a regra 15 (declaracao_matricial)
 
 
 Estado 25
 
-   17 operacao: declaracao_matricial . ATRIBUITION matrix_literal
+   23 exprecao: lit_logical .
 
-    ATRIBUITION  deslocar, e ir ao estado 34
+    $padrão  reduzir usando a regra 23 (exprecao)
 
 
 Estado 26
 
-   21 exprecao: operacao .
+   22 exprecao: literal .
 
-    $padrão  reduzir usando a regra 21 (exprecao)
+    $padrão  reduzir usando a regra 22 (exprecao)
 
 
 Estado 27
 
-   23 teste: exprecao . booleano exprecao
-   24      | OPARENTHESIS exprecao . booleano exprecao CPARENTHESIS
-   25 conta: exprecao . matematica exprecao
-   26      | OPARENTHESIS exprecao . matematica exprecao CPARENTHESIS
+   46 escalar: type . ID
+   47 vetorial: type . ID dimension
+   48 matricial: type . ID dimension dimension
 
-    SUM       deslocar, e ir ao estado 35
-    SUBTRACT  deslocar, e ir ao estado 36
-    MULTIPLY  deslocar, e ir ao estado 37
-    DIVIDE    deslocar, e ir ao estado 38
-    POW       deslocar, e ir ao estado 39
-    MODULUS   deslocar, e ir ao estado 40
-    EQ        deslocar, e ir ao estado 41
-    NE        deslocar, e ir ao estado 42
-    GT        deslocar, e ir ao estado 43
-    GE        deslocar, e ir ao estado 44
-    LT        deslocar, e ir ao estado 45
-    LE        deslocar, e ir ao estado 46
-
-    booleano    ir ao estado 50
-    matematica  ir ao estado 51
+    ID  deslocar, e ir ao estado 57
 
 
 Estado 28
+
+   16 operacao: declaracao_escalar . ATRIBUITION literal
+   17         | declaracao_escalar . ATRIBUITION exprecao
+
+    ATRIBUITION  deslocar, e ir ao estado 38
+
+
+Estado 29
+
+   18 operacao: declaracao_vetorial . ATRIBUITION vector_literal
+
+    ATRIBUITION  deslocar, e ir ao estado 39
+
+
+Estado 30
+
+   19 operacao: declaracao_matricial . ATRIBUITION matrix_literal
+
+    ATRIBUITION  deslocar, e ir ao estado 40
+
+
+Estado 31
+
+   24 exprecao: operacao .
+
+    $padrão  reduzir usando a regra 24 (exprecao)
+
+
+Estado 32
+
+   26 teste: exprecao . booleano exprecao
+   28 conta: exprecao . matematica exprecao
+   44 estrutura: IF exprecao . nlines stmts nlines END
+
+    SUM       deslocar, e ir ao estado 41
+    SUBTRACT  deslocar, e ir ao estado 42
+    MULTIPLY  deslocar, e ir ao estado 43
+    DIVIDE    deslocar, e ir ao estado 44
+    POW       deslocar, e ir ao estado 45
+    MODULUS   deslocar, e ir ao estado 46
+    EQ        deslocar, e ir ao estado 47
+    NE        deslocar, e ir ao estado 48
+    GT        deslocar, e ir ao estado 49
+    GE        deslocar, e ir ao estado 50
+    LT        deslocar, e ir ao estado 51
+    LE        deslocar, e ir ao estado 52
+    NLINE     deslocar, e ir ao estado 58
+    AND       deslocar, e ir ao estado 53
+    OR        deslocar, e ir ao estado 54
+
+    nlines      ir ao estado 59
+    booleano    ir ao estado 55
+    matematica  ir ao estado 56
+
+
+Estado 33
+
+   26 teste: exprecao . booleano exprecao
+   27      | OPARENTHESIS exprecao . booleano exprecao CPARENTHESIS
+   28 conta: exprecao . matematica exprecao
+   29      | OPARENTHESIS exprecao . matematica exprecao CPARENTHESIS
+
+    SUM       deslocar, e ir ao estado 41
+    SUBTRACT  deslocar, e ir ao estado 42
+    MULTIPLY  deslocar, e ir ao estado 43
+    DIVIDE    deslocar, e ir ao estado 44
+    POW       deslocar, e ir ao estado 45
+    MODULUS   deslocar, e ir ao estado 46
+    EQ        deslocar, e ir ao estado 47
+    NE        deslocar, e ir ao estado 48
+    GT        deslocar, e ir ao estado 49
+    GE        deslocar, e ir ao estado 50
+    LT        deslocar, e ir ao estado 51
+    LE        deslocar, e ir ao estado 52
+    AND       deslocar, e ir ao estado 53
+    OR        deslocar, e ir ao estado 54
+
+    booleano    ir ao estado 60
+    matematica  ir ao estado 61
+
+
+Estado 34
 
     0 $accept: code $end .
 
     $padrão  aceitar
 
 
-Estado 29
+Estado 35
 
     1 code: stmts NLINE .
-    7 nlines: NLINE .
+    8 nlines: NLINE .
 
     $end      reduzir usando a regra 1 (code)
-    $padrão  reduzir usando a regra 7 (nlines)
+    $padrão  reduzir usando a regra 8 (nlines)
 
 
-Estado 30
+Estado 36
 
     3 stmts: stmts stmt .
 
     $padrão  reduzir usando a regra 3 (stmts)
 
 
-Estado 31
-
-    4 stmts: stmts nlines . stmt
-    8 nlines: nlines . NLINE
-
-    TINT          deslocar, e ir ao estado 1
-    TREAL         deslocar, e ir ao estado 2
-    OPARENTHESIS  deslocar, e ir ao estado 3
-    NLINE         deslocar, e ir ao estado 52
-    ID            deslocar, e ir ao estado 4
-    INTEGER       deslocar, e ir ao estado 5
-    REAL          deslocar, e ir ao estado 6
-
-    stmt                  ir ao estado 53
-    declaracao            ir ao estado 10
-    declaracao_escalar    ir ao estado 11
-    declaracao_vetorial   ir ao estado 12
-    declaracao_matricial  ir ao estado 13
-    operacao              ir ao estado 14
-    exprecao              ir ao estado 15
-    teste                 ir ao estado 16
-    conta                 ir ao estado 17
-    escalar               ir ao estado 18
-    vetorial              ir ao estado 19
-    matricial             ir ao estado 20
-    literal               ir ao estado 21
-    type                  ir ao estado 22
-
-
-Estado 32
-
-   15 operacao: declaracao_escalar ATRIBUITION . literal
-
-    INTEGER  deslocar, e ir ao estado 5
-    REAL     deslocar, e ir ao estado 6
-
-    literal  ir ao estado 54
-
-
-Estado 33
-
-   16 operacao: declaracao_vetorial ATRIBUITION . vector_literal
-
-    NONE       deslocar, e ir ao estado 55
-    OCBRACKET  deslocar, e ir ao estado 56
-
-    vector_literal  ir ao estado 57
-    lit_none        ir ao estado 58
-
-
-Estado 34
-
-   17 operacao: declaracao_matricial ATRIBUITION . matrix_literal
-
-    NONE       deslocar, e ir ao estado 55
-    OCBRACKET  deslocar, e ir ao estado 59
-
-    vector_literal  ir ao estado 60
-    matrix_literal  ir ao estado 61
-    lit_none        ir ao estado 58
-
-
-Estado 35
-
-   33 matematica: SUM .
-
-    $padrão  reduzir usando a regra 33 (matematica)
-
-
-Estado 36
-
-   34 matematica: SUBTRACT .
-
-    $padrão  reduzir usando a regra 34 (matematica)
-
-
 Estado 37
 
-   35 matematica: MULTIPLY .
+    4 stmts: stmts nlines . stmt
+    9 nlines: nlines . NLINE
 
-    $padrão  reduzir usando a regra 35 (matematica)
+    IF            deslocar, e ir ao estado 1
+    TINT          deslocar, e ir ao estado 2
+    TREAL         deslocar, e ir ao estado 3
+    OPARENTHESIS  deslocar, e ir ao estado 4
+    NLINE         deslocar, e ir ao estado 62
+    ID            deslocar, e ir ao estado 5
+    INTEGER       deslocar, e ir ao estado 6
+    REAL          deslocar, e ir ao estado 7
+    TRUE          deslocar, e ir ao estado 8
+    FALSE         deslocar, e ir ao estado 9
+
+    stmt                  ir ao estado 63
+    declaracao            ir ao estado 13
+    declaracao_escalar    ir ao estado 14
+    declaracao_vetorial   ir ao estado 15
+    declaracao_matricial  ir ao estado 16
+    operacao              ir ao estado 17
+    exprecao              ir ao estado 18
+    teste                 ir ao estado 19
+    conta                 ir ao estado 20
+    estrutura             ir ao estado 21
+    escalar               ir ao estado 22
+    vetorial              ir ao estado 23
+    matricial             ir ao estado 24
+    lit_logical           ir ao estado 25
+    literal               ir ao estado 26
+    type                  ir ao estado 27
 
 
 Estado 38
 
-   36 matematica: DIVIDE .
+   16 operacao: declaracao_escalar ATRIBUITION . literal
+   17         | declaracao_escalar ATRIBUITION . exprecao
 
-    $padrão  reduzir usando a regra 36 (matematica)
+    TINT          deslocar, e ir ao estado 2
+    TREAL         deslocar, e ir ao estado 3
+    OPARENTHESIS  deslocar, e ir ao estado 4
+    ID            deslocar, e ir ao estado 5
+    INTEGER       deslocar, e ir ao estado 6
+    REAL          deslocar, e ir ao estado 7
+    TRUE          deslocar, e ir ao estado 8
+    FALSE         deslocar, e ir ao estado 9
+
+    declaracao_escalar    ir ao estado 28
+    declaracao_vetorial   ir ao estado 29
+    declaracao_matricial  ir ao estado 30
+    operacao              ir ao estado 31
+    exprecao              ir ao estado 64
+    teste                 ir ao estado 19
+    conta                 ir ao estado 20
+    escalar               ir ao estado 22
+    vetorial              ir ao estado 23
+    matricial             ir ao estado 24
+    lit_logical           ir ao estado 25
+    literal               ir ao estado 65
+    type                  ir ao estado 27
 
 
 Estado 39
 
-   37 matematica: POW .
+   18 operacao: declaracao_vetorial ATRIBUITION . vector_literal
 
-    $padrão  reduzir usando a regra 37 (matematica)
+    NONE       deslocar, e ir ao estado 66
+    OCBRACKET  deslocar, e ir ao estado 67
+
+    vector_literal  ir ao estado 68
+    lit_none        ir ao estado 69
 
 
 Estado 40
 
-   38 matematica: MODULUS .
+   19 operacao: declaracao_matricial ATRIBUITION . matrix_literal
 
-    $padrão  reduzir usando a regra 38 (matematica)
+    NONE       deslocar, e ir ao estado 66
+    OCBRACKET  deslocar, e ir ao estado 70
+
+    vector_literal  ir ao estado 71
+    matrix_literal  ir ao estado 72
+    lit_none        ir ao estado 69
 
 
 Estado 41
 
-   27 booleano: EQ .
+   38 matematica: SUM .
 
-    $padrão  reduzir usando a regra 27 (booleano)
+    $padrão  reduzir usando a regra 38 (matematica)
 
 
 Estado 42
 
-   28 booleano: NE .
+   39 matematica: SUBTRACT .
 
-    $padrão  reduzir usando a regra 28 (booleano)
+    $padrão  reduzir usando a regra 39 (matematica)
 
 
 Estado 43
 
-   29 booleano: GT .
+   40 matematica: MULTIPLY .
 
-    $padrão  reduzir usando a regra 29 (booleano)
+    $padrão  reduzir usando a regra 40 (matematica)
 
 
 Estado 44
 
-   30 booleano: GE .
+   41 matematica: DIVIDE .
 
-    $padrão  reduzir usando a regra 30 (booleano)
+    $padrão  reduzir usando a regra 41 (matematica)
 
 
 Estado 45
 
-   31 booleano: LT .
+   42 matematica: POW .
 
-    $padrão  reduzir usando a regra 31 (booleano)
+    $padrão  reduzir usando a regra 42 (matematica)
 
 
 Estado 46
 
-   32 booleano: LE .
+   43 matematica: MODULUS .
 
-    $padrão  reduzir usando a regra 32 (booleano)
+    $padrão  reduzir usando a regra 43 (matematica)
 
 
 Estado 47
 
-   23 teste: exprecao booleano . exprecao
+   30 booleano: EQ .
 
-    TINT          deslocar, e ir ao estado 1
-    TREAL         deslocar, e ir ao estado 2
-    OPARENTHESIS  deslocar, e ir ao estado 3
-    ID            deslocar, e ir ao estado 4
-    INTEGER       deslocar, e ir ao estado 5
-    REAL          deslocar, e ir ao estado 6
-
-    declaracao_escalar    ir ao estado 23
-    declaracao_vetorial   ir ao estado 24
-    declaracao_matricial  ir ao estado 25
-    operacao              ir ao estado 26
-    exprecao              ir ao estado 62
-    teste                 ir ao estado 16
-    conta                 ir ao estado 17
-    escalar               ir ao estado 18
-    vetorial              ir ao estado 19
-    matricial             ir ao estado 20
-    literal               ir ao estado 21
-    type                  ir ao estado 22
+    $padrão  reduzir usando a regra 30 (booleano)
 
 
 Estado 48
 
-   25 conta: exprecao matematica . exprecao
+   31 booleano: NE .
 
-    TINT          deslocar, e ir ao estado 1
-    TREAL         deslocar, e ir ao estado 2
-    OPARENTHESIS  deslocar, e ir ao estado 3
-    ID            deslocar, e ir ao estado 4
-    INTEGER       deslocar, e ir ao estado 5
-    REAL          deslocar, e ir ao estado 6
-
-    declaracao_escalar    ir ao estado 23
-    declaracao_vetorial   ir ao estado 24
-    declaracao_matricial  ir ao estado 25
-    operacao              ir ao estado 26
-    exprecao              ir ao estado 63
-    teste                 ir ao estado 16
-    conta                 ir ao estado 17
-    escalar               ir ao estado 18
-    vetorial              ir ao estado 19
-    matricial             ir ao estado 20
-    literal               ir ao estado 21
-    type                  ir ao estado 22
+    $padrão  reduzir usando a regra 31 (booleano)
 
 
 Estado 49
 
-   40 escalar: type ID .
-   41 vetorial: type ID . dimension
-   42 matricial: type ID . dimension dimension
+   32 booleano: GT .
 
-    OBRACKET  deslocar, e ir ao estado 64
-
-    $padrão  reduzir usando a regra 40 (escalar)
-
-    dimension  ir ao estado 65
+    $padrão  reduzir usando a regra 32 (booleano)
 
 
 Estado 50
 
-   23 teste: exprecao booleano . exprecao
-   24      | OPARENTHESIS exprecao booleano . exprecao CPARENTHESIS
+   33 booleano: GE .
 
-    TINT          deslocar, e ir ao estado 1
-    TREAL         deslocar, e ir ao estado 2
-    OPARENTHESIS  deslocar, e ir ao estado 3
-    ID            deslocar, e ir ao estado 4
-    INTEGER       deslocar, e ir ao estado 5
-    REAL          deslocar, e ir ao estado 6
-
-    declaracao_escalar    ir ao estado 23
-    declaracao_vetorial   ir ao estado 24
-    declaracao_matricial  ir ao estado 25
-    operacao              ir ao estado 26
-    exprecao              ir ao estado 66
-    teste                 ir ao estado 16
-    conta                 ir ao estado 17
-    escalar               ir ao estado 18
-    vetorial              ir ao estado 19
-    matricial             ir ao estado 20
-    literal               ir ao estado 21
-    type                  ir ao estado 22
+    $padrão  reduzir usando a regra 33 (booleano)
 
 
 Estado 51
 
-   25 conta: exprecao matematica . exprecao
-   26      | OPARENTHESIS exprecao matematica . exprecao CPARENTHESIS
+   34 booleano: LT .
 
-    TINT          deslocar, e ir ao estado 1
-    TREAL         deslocar, e ir ao estado 2
-    OPARENTHESIS  deslocar, e ir ao estado 3
-    ID            deslocar, e ir ao estado 4
-    INTEGER       deslocar, e ir ao estado 5
-    REAL          deslocar, e ir ao estado 6
-
-    declaracao_escalar    ir ao estado 23
-    declaracao_vetorial   ir ao estado 24
-    declaracao_matricial  ir ao estado 25
-    operacao              ir ao estado 26
-    exprecao              ir ao estado 67
-    teste                 ir ao estado 16
-    conta                 ir ao estado 17
-    escalar               ir ao estado 18
-    vetorial              ir ao estado 19
-    matricial             ir ao estado 20
-    literal               ir ao estado 21
-    type                  ir ao estado 22
+    $padrão  reduzir usando a regra 34 (booleano)
 
 
 Estado 52
 
-    8 nlines: nlines NLINE .
+   35 booleano: LE .
+
+    $padrão  reduzir usando a regra 35 (booleano)
+
+
+Estado 53
+
+   36 booleano: AND .
+
+    $padrão  reduzir usando a regra 36 (booleano)
+
+
+Estado 54
+
+   37 booleano: OR .
+
+    $padrão  reduzir usando a regra 37 (booleano)
+
+
+Estado 55
+
+   26 teste: exprecao booleano . exprecao
+
+    TINT          deslocar, e ir ao estado 2
+    TREAL         deslocar, e ir ao estado 3
+    OPARENTHESIS  deslocar, e ir ao estado 4
+    ID            deslocar, e ir ao estado 5
+    INTEGER       deslocar, e ir ao estado 6
+    REAL          deslocar, e ir ao estado 7
+    TRUE          deslocar, e ir ao estado 8
+    FALSE         deslocar, e ir ao estado 9
+
+    declaracao_escalar    ir ao estado 28
+    declaracao_vetorial   ir ao estado 29
+    declaracao_matricial  ir ao estado 30
+    operacao              ir ao estado 31
+    exprecao              ir ao estado 73
+    teste                 ir ao estado 19
+    conta                 ir ao estado 20
+    escalar               ir ao estado 22
+    vetorial              ir ao estado 23
+    matricial             ir ao estado 24
+    lit_logical           ir ao estado 25
+    literal               ir ao estado 26
+    type                  ir ao estado 27
+
+
+Estado 56
+
+   28 conta: exprecao matematica . exprecao
+
+    TINT          deslocar, e ir ao estado 2
+    TREAL         deslocar, e ir ao estado 3
+    OPARENTHESIS  deslocar, e ir ao estado 4
+    ID            deslocar, e ir ao estado 5
+    INTEGER       deslocar, e ir ao estado 6
+    REAL          deslocar, e ir ao estado 7
+    TRUE          deslocar, e ir ao estado 8
+    FALSE         deslocar, e ir ao estado 9
+
+    declaracao_escalar    ir ao estado 28
+    declaracao_vetorial   ir ao estado 29
+    declaracao_matricial  ir ao estado 30
+    operacao              ir ao estado 31
+    exprecao              ir ao estado 74
+    teste                 ir ao estado 19
+    conta                 ir ao estado 20
+    escalar               ir ao estado 22
+    vetorial              ir ao estado 23
+    matricial             ir ao estado 24
+    lit_logical           ir ao estado 25
+    literal               ir ao estado 26
+    type                  ir ao estado 27
+
+
+Estado 57
+
+   46 escalar: type ID .
+   47 vetorial: type ID . dimension
+   48 matricial: type ID . dimension dimension
+
+    OBRACKET  deslocar, e ir ao estado 75
+
+    $padrão  reduzir usando a regra 46 (escalar)
+
+    dimension  ir ao estado 76
+
+
+Estado 58
+
+    8 nlines: NLINE .
 
     $padrão  reduzir usando a regra 8 (nlines)
 
 
-Estado 53
+Estado 59
+
+    9 nlines: nlines . NLINE
+   44 estrutura: IF exprecao nlines . stmts nlines END
+
+    IF            deslocar, e ir ao estado 1
+    TINT          deslocar, e ir ao estado 2
+    TREAL         deslocar, e ir ao estado 3
+    OPARENTHESIS  deslocar, e ir ao estado 4
+    NLINE         deslocar, e ir ao estado 62
+    ID            deslocar, e ir ao estado 5
+    INTEGER       deslocar, e ir ao estado 6
+    REAL          deslocar, e ir ao estado 7
+    TRUE          deslocar, e ir ao estado 8
+    FALSE         deslocar, e ir ao estado 9
+
+    stmts                 ir ao estado 77
+    stmt                  ir ao estado 12
+    declaracao            ir ao estado 13
+    declaracao_escalar    ir ao estado 14
+    declaracao_vetorial   ir ao estado 15
+    declaracao_matricial  ir ao estado 16
+    operacao              ir ao estado 17
+    exprecao              ir ao estado 18
+    teste                 ir ao estado 19
+    conta                 ir ao estado 20
+    estrutura             ir ao estado 21
+    escalar               ir ao estado 22
+    vetorial              ir ao estado 23
+    matricial             ir ao estado 24
+    lit_logical           ir ao estado 25
+    literal               ir ao estado 26
+    type                  ir ao estado 27
+
+
+Estado 60
+
+   26 teste: exprecao booleano . exprecao
+   27      | OPARENTHESIS exprecao booleano . exprecao CPARENTHESIS
+
+    TINT          deslocar, e ir ao estado 2
+    TREAL         deslocar, e ir ao estado 3
+    OPARENTHESIS  deslocar, e ir ao estado 4
+    ID            deslocar, e ir ao estado 5
+    INTEGER       deslocar, e ir ao estado 6
+    REAL          deslocar, e ir ao estado 7
+    TRUE          deslocar, e ir ao estado 8
+    FALSE         deslocar, e ir ao estado 9
+
+    declaracao_escalar    ir ao estado 28
+    declaracao_vetorial   ir ao estado 29
+    declaracao_matricial  ir ao estado 30
+    operacao              ir ao estado 31
+    exprecao              ir ao estado 78
+    teste                 ir ao estado 19
+    conta                 ir ao estado 20
+    escalar               ir ao estado 22
+    vetorial              ir ao estado 23
+    matricial             ir ao estado 24
+    lit_logical           ir ao estado 25
+    literal               ir ao estado 26
+    type                  ir ao estado 27
+
+
+Estado 61
+
+   28 conta: exprecao matematica . exprecao
+   29      | OPARENTHESIS exprecao matematica . exprecao CPARENTHESIS
+
+    TINT          deslocar, e ir ao estado 2
+    TREAL         deslocar, e ir ao estado 3
+    OPARENTHESIS  deslocar, e ir ao estado 4
+    ID            deslocar, e ir ao estado 5
+    INTEGER       deslocar, e ir ao estado 6
+    REAL          deslocar, e ir ao estado 7
+    TRUE          deslocar, e ir ao estado 8
+    FALSE         deslocar, e ir ao estado 9
+
+    declaracao_escalar    ir ao estado 28
+    declaracao_vetorial   ir ao estado 29
+    declaracao_matricial  ir ao estado 30
+    operacao              ir ao estado 31
+    exprecao              ir ao estado 79
+    teste                 ir ao estado 19
+    conta                 ir ao estado 20
+    escalar               ir ao estado 22
+    vetorial              ir ao estado 23
+    matricial             ir ao estado 24
+    lit_logical           ir ao estado 25
+    literal               ir ao estado 26
+    type                  ir ao estado 27
+
+
+Estado 62
+
+    9 nlines: nlines NLINE .
+
+    $padrão  reduzir usando a regra 9 (nlines)
+
+
+Estado 63
 
     4 stmts: stmts nlines stmt .
 
     $padrão  reduzir usando a regra 4 (stmts)
 
 
-Estado 54
-
-   15 operacao: declaracao_escalar ATRIBUITION literal .
-
-    $padrão  reduzir usando a regra 15 (operacao)
-
-
-Estado 55
-
-   50 lit_none: NONE .
-
-    $padrão  reduzir usando a regra 50 (lit_none)
-
-
-Estado 56
-
-   45 vector_literal: OCBRACKET . literal_list CCBRACKET
-
-    INTEGER  deslocar, e ir ao estado 5
-    REAL     deslocar, e ir ao estado 6
-
-    literal_list  ir ao estado 68
-    literal       ir ao estado 69
-
-
-Estado 57
-
-   16 operacao: declaracao_vetorial ATRIBUITION vector_literal .
-
-    $padrão  reduzir usando a regra 16 (operacao)
-
-
-Estado 58
-
-   46 vector_literal: lit_none .
-
-    $padrão  reduzir usando a regra 46 (vector_literal)
-
-
-Estado 59
-
-   45 vector_literal: OCBRACKET . literal_list CCBRACKET
-   48 matrix_literal: OCBRACKET . matrix_literal CCBRACKET
-
-    NONE       deslocar, e ir ao estado 55
-    INTEGER    deslocar, e ir ao estado 5
-    REAL       deslocar, e ir ao estado 6
-    OCBRACKET  deslocar, e ir ao estado 59
-
-    literal_list    ir ao estado 68
-    vector_literal  ir ao estado 60
-    matrix_literal  ir ao estado 70
-    lit_none        ir ao estado 58
-    literal         ir ao estado 69
-
-
-Estado 60
-
-   47 matrix_literal: vector_literal .
-
-    $padrão  reduzir usando a regra 47 (matrix_literal)
-
-
-Estado 61
-
-   17 operacao: declaracao_matricial ATRIBUITION matrix_literal .
-   49 matrix_literal: matrix_literal . COLON vector_literal
-
-    COLON  deslocar, e ir ao estado 71
-
-    $padrão  reduzir usando a regra 17 (operacao)
-
-
-Estado 62
-
-   23 teste: exprecao . booleano exprecao
-   23      | exprecao booleano exprecao .
-   25 conta: exprecao . matematica exprecao
-
-    SUM       deslocar, e ir ao estado 35
-    SUBTRACT  deslocar, e ir ao estado 36
-    MULTIPLY  deslocar, e ir ao estado 37
-    DIVIDE    deslocar, e ir ao estado 38
-    POW       deslocar, e ir ao estado 39
-    MODULUS   deslocar, e ir ao estado 40
-    EQ        deslocar, e ir ao estado 41
-    NE        deslocar, e ir ao estado 42
-    GT        deslocar, e ir ao estado 43
-    GE        deslocar, e ir ao estado 44
-    LT        deslocar, e ir ao estado 45
-    LE        deslocar, e ir ao estado 46
-
-    SUM       [reduzir usando a regra 23 (teste)]
-    SUBTRACT  [reduzir usando a regra 23 (teste)]
-    MULTIPLY  [reduzir usando a regra 23 (teste)]
-    DIVIDE    [reduzir usando a regra 23 (teste)]
-    POW       [reduzir usando a regra 23 (teste)]
-    MODULUS   [reduzir usando a regra 23 (teste)]
-    EQ        [reduzir usando a regra 23 (teste)]
-    NE        [reduzir usando a regra 23 (teste)]
-    GT        [reduzir usando a regra 23 (teste)]
-    GE        [reduzir usando a regra 23 (teste)]
-    LT        [reduzir usando a regra 23 (teste)]
-    LE        [reduzir usando a regra 23 (teste)]
-    $padrão  reduzir usando a regra 23 (teste)
-
-    booleano    ir ao estado 47
-    matematica  ir ao estado 48
-
-
-Estado 63
-
-   23 teste: exprecao . booleano exprecao
-   25 conta: exprecao . matematica exprecao
-   25      | exprecao matematica exprecao .
-
-    SUM       deslocar, e ir ao estado 35
-    SUBTRACT  deslocar, e ir ao estado 36
-    MULTIPLY  deslocar, e ir ao estado 37
-    DIVIDE    deslocar, e ir ao estado 38
-    POW       deslocar, e ir ao estado 39
-    MODULUS   deslocar, e ir ao estado 40
-    EQ        deslocar, e ir ao estado 41
-    NE        deslocar, e ir ao estado 42
-    GT        deslocar, e ir ao estado 43
-    GE        deslocar, e ir ao estado 44
-    LT        deslocar, e ir ao estado 45
-    LE        deslocar, e ir ao estado 46
-
-    SUM       [reduzir usando a regra 25 (conta)]
-    SUBTRACT  [reduzir usando a regra 25 (conta)]
-    MULTIPLY  [reduzir usando a regra 25 (conta)]
-    DIVIDE    [reduzir usando a regra 25 (conta)]
-    POW       [reduzir usando a regra 25 (conta)]
-    MODULUS   [reduzir usando a regra 25 (conta)]
-    EQ        [reduzir usando a regra 25 (conta)]
-    NE        [reduzir usando a regra 25 (conta)]
-    GT        [reduzir usando a regra 25 (conta)]
-    GE        [reduzir usando a regra 25 (conta)]
-    LT        [reduzir usando a regra 25 (conta)]
-    LE        [reduzir usando a regra 25 (conta)]
-    $padrão  reduzir usando a regra 25 (conta)
-
-    booleano    ir ao estado 47
-    matematica  ir ao estado 48
-
-
 Estado 64
 
-   39 dimension: OBRACKET . INTEGER CBRACKET
+   17 operacao: declaracao_escalar ATRIBUITION exprecao .
+   26 teste: exprecao . booleano exprecao
+   28 conta: exprecao . matematica exprecao
 
-    INTEGER  deslocar, e ir ao estado 72
+    SUM       deslocar, e ir ao estado 41
+    SUBTRACT  deslocar, e ir ao estado 42
+    MULTIPLY  deslocar, e ir ao estado 43
+    DIVIDE    deslocar, e ir ao estado 44
+    POW       deslocar, e ir ao estado 45
+    MODULUS   deslocar, e ir ao estado 46
+    EQ        deslocar, e ir ao estado 47
+    NE        deslocar, e ir ao estado 48
+    GT        deslocar, e ir ao estado 49
+    GE        deslocar, e ir ao estado 50
+    LT        deslocar, e ir ao estado 51
+    LE        deslocar, e ir ao estado 52
+    AND       deslocar, e ir ao estado 53
+    OR        deslocar, e ir ao estado 54
+
+    SUM       [reduzir usando a regra 17 (operacao)]
+    SUBTRACT  [reduzir usando a regra 17 (operacao)]
+    MULTIPLY  [reduzir usando a regra 17 (operacao)]
+    DIVIDE    [reduzir usando a regra 17 (operacao)]
+    POW       [reduzir usando a regra 17 (operacao)]
+    MODULUS   [reduzir usando a regra 17 (operacao)]
+    EQ        [reduzir usando a regra 17 (operacao)]
+    NE        [reduzir usando a regra 17 (operacao)]
+    GT        [reduzir usando a regra 17 (operacao)]
+    GE        [reduzir usando a regra 17 (operacao)]
+    LT        [reduzir usando a regra 17 (operacao)]
+    LE        [reduzir usando a regra 17 (operacao)]
+    AND       [reduzir usando a regra 17 (operacao)]
+    OR        [reduzir usando a regra 17 (operacao)]
+    $padrão  reduzir usando a regra 17 (operacao)
+
+    booleano    ir ao estado 55
+    matematica  ir ao estado 56
 
 
 Estado 65
 
-   41 vetorial: type ID dimension .
-   42 matricial: type ID dimension . dimension
+   16 operacao: declaracao_escalar ATRIBUITION literal .
+   22 exprecao: literal .
 
-    OBRACKET  deslocar, e ir ao estado 64
-
-    $padrão  reduzir usando a regra 41 (vetorial)
-
-    dimension  ir ao estado 73
+    SUM           reduzir usando a regra 16 (operacao)
+    SUM           [reduzir usando a regra 22 (exprecao)]
+    SUBTRACT      reduzir usando a regra 16 (operacao)
+    SUBTRACT      [reduzir usando a regra 22 (exprecao)]
+    IF            reduzir usando a regra 16 (operacao)
+    IF            [reduzir usando a regra 22 (exprecao)]
+    TINT          reduzir usando a regra 16 (operacao)
+    TINT          [reduzir usando a regra 22 (exprecao)]
+    TREAL         reduzir usando a regra 16 (operacao)
+    TREAL         [reduzir usando a regra 22 (exprecao)]
+    OPARENTHESIS  reduzir usando a regra 16 (operacao)
+    OPARENTHESIS  [reduzir usando a regra 22 (exprecao)]
+    CPARENTHESIS  reduzir usando a regra 16 (operacao)
+    CPARENTHESIS  [reduzir usando a regra 22 (exprecao)]
+    MULTIPLY      reduzir usando a regra 16 (operacao)
+    MULTIPLY      [reduzir usando a regra 22 (exprecao)]
+    DIVIDE        reduzir usando a regra 16 (operacao)
+    DIVIDE        [reduzir usando a regra 22 (exprecao)]
+    POW           reduzir usando a regra 16 (operacao)
+    POW           [reduzir usando a regra 22 (exprecao)]
+    MODULUS       reduzir usando a regra 16 (operacao)
+    MODULUS       [reduzir usando a regra 22 (exprecao)]
+    EQ            reduzir usando a regra 16 (operacao)
+    EQ            [reduzir usando a regra 22 (exprecao)]
+    NE            reduzir usando a regra 16 (operacao)
+    NE            [reduzir usando a regra 22 (exprecao)]
+    GT            reduzir usando a regra 16 (operacao)
+    GT            [reduzir usando a regra 22 (exprecao)]
+    GE            reduzir usando a regra 16 (operacao)
+    GE            [reduzir usando a regra 22 (exprecao)]
+    LT            reduzir usando a regra 16 (operacao)
+    LT            [reduzir usando a regra 22 (exprecao)]
+    LE            reduzir usando a regra 16 (operacao)
+    LE            [reduzir usando a regra 22 (exprecao)]
+    NLINE         reduzir usando a regra 16 (operacao)
+    NLINE         [reduzir usando a regra 22 (exprecao)]
+    ID            reduzir usando a regra 16 (operacao)
+    ID            [reduzir usando a regra 22 (exprecao)]
+    INTEGER       reduzir usando a regra 16 (operacao)
+    INTEGER       [reduzir usando a regra 22 (exprecao)]
+    REAL          reduzir usando a regra 16 (operacao)
+    REAL          [reduzir usando a regra 22 (exprecao)]
+    TRUE          reduzir usando a regra 16 (operacao)
+    TRUE          [reduzir usando a regra 22 (exprecao)]
+    FALSE         reduzir usando a regra 16 (operacao)
+    FALSE         [reduzir usando a regra 22 (exprecao)]
+    AND           reduzir usando a regra 16 (operacao)
+    AND           [reduzir usando a regra 22 (exprecao)]
+    OR            reduzir usando a regra 16 (operacao)
+    OR            [reduzir usando a regra 22 (exprecao)]
+    $padrão      reduzir usando a regra 16 (operacao)
 
 
 Estado 66
 
-   23 teste: exprecao . booleano exprecao
-   23      | exprecao booleano exprecao .
-   24      | OPARENTHESIS exprecao booleano exprecao . CPARENTHESIS
-   25 conta: exprecao . matematica exprecao
+   56 lit_none: NONE .
 
-    SUM           deslocar, e ir ao estado 35
-    SUBTRACT      deslocar, e ir ao estado 36
-    CPARENTHESIS  deslocar, e ir ao estado 74
-    MULTIPLY      deslocar, e ir ao estado 37
-    DIVIDE        deslocar, e ir ao estado 38
-    POW           deslocar, e ir ao estado 39
-    MODULUS       deslocar, e ir ao estado 40
-    EQ            deslocar, e ir ao estado 41
-    NE            deslocar, e ir ao estado 42
-    GT            deslocar, e ir ao estado 43
-    GE            deslocar, e ir ao estado 44
-    LT            deslocar, e ir ao estado 45
-    LE            deslocar, e ir ao estado 46
-
-    SUM       [reduzir usando a regra 23 (teste)]
-    SUBTRACT  [reduzir usando a regra 23 (teste)]
-    MULTIPLY  [reduzir usando a regra 23 (teste)]
-    DIVIDE    [reduzir usando a regra 23 (teste)]
-    POW       [reduzir usando a regra 23 (teste)]
-    MODULUS   [reduzir usando a regra 23 (teste)]
-    EQ        [reduzir usando a regra 23 (teste)]
-    NE        [reduzir usando a regra 23 (teste)]
-    GT        [reduzir usando a regra 23 (teste)]
-    GE        [reduzir usando a regra 23 (teste)]
-    LT        [reduzir usando a regra 23 (teste)]
-    LE        [reduzir usando a regra 23 (teste)]
-
-    booleano    ir ao estado 47
-    matematica  ir ao estado 48
+    $padrão  reduzir usando a regra 56 (lit_none)
 
 
 Estado 67
 
-   23 teste: exprecao . booleano exprecao
-   25 conta: exprecao . matematica exprecao
-   25      | exprecao matematica exprecao .
-   26      | OPARENTHESIS exprecao matematica exprecao . CPARENTHESIS
+   51 vector_literal: OCBRACKET . literal_list CCBRACKET
 
-    SUM           deslocar, e ir ao estado 35
-    SUBTRACT      deslocar, e ir ao estado 36
-    CPARENTHESIS  deslocar, e ir ao estado 75
-    MULTIPLY      deslocar, e ir ao estado 37
-    DIVIDE        deslocar, e ir ao estado 38
-    POW           deslocar, e ir ao estado 39
-    MODULUS       deslocar, e ir ao estado 40
-    EQ            deslocar, e ir ao estado 41
-    NE            deslocar, e ir ao estado 42
-    GT            deslocar, e ir ao estado 43
-    GE            deslocar, e ir ao estado 44
-    LT            deslocar, e ir ao estado 45
-    LE            deslocar, e ir ao estado 46
+    INTEGER  deslocar, e ir ao estado 6
+    REAL     deslocar, e ir ao estado 7
 
-    SUM       [reduzir usando a regra 25 (conta)]
-    SUBTRACT  [reduzir usando a regra 25 (conta)]
-    MULTIPLY  [reduzir usando a regra 25 (conta)]
-    DIVIDE    [reduzir usando a regra 25 (conta)]
-    POW       [reduzir usando a regra 25 (conta)]
-    MODULUS   [reduzir usando a regra 25 (conta)]
-    EQ        [reduzir usando a regra 25 (conta)]
-    NE        [reduzir usando a regra 25 (conta)]
-    GT        [reduzir usando a regra 25 (conta)]
-    GE        [reduzir usando a regra 25 (conta)]
-    LT        [reduzir usando a regra 25 (conta)]
-    LE        [reduzir usando a regra 25 (conta)]
-
-    booleano    ir ao estado 47
-    matematica  ir ao estado 48
+    literal_list  ir ao estado 80
+    literal       ir ao estado 81
 
 
 Estado 68
 
-   44 literal_list: literal_list . COLON literal
-   45 vector_literal: OCBRACKET literal_list . CCBRACKET
+   18 operacao: declaracao_vetorial ATRIBUITION vector_literal .
 
-    COLON      deslocar, e ir ao estado 76
-    CCBRACKET  deslocar, e ir ao estado 77
+    $padrão  reduzir usando a regra 18 (operacao)
 
 
 Estado 69
 
-   43 literal_list: literal .
+   52 vector_literal: lit_none .
 
-    $padrão  reduzir usando a regra 43 (literal_list)
+    $padrão  reduzir usando a regra 52 (vector_literal)
 
 
 Estado 70
 
-   48 matrix_literal: OCBRACKET matrix_literal . CCBRACKET
-   49               | matrix_literal . COLON vector_literal
+   51 vector_literal: OCBRACKET . literal_list CCBRACKET
+   54 matrix_literal: OCBRACKET . matrix_literal CCBRACKET
 
-    COLON      deslocar, e ir ao estado 71
-    CCBRACKET  deslocar, e ir ao estado 78
+    NONE       deslocar, e ir ao estado 66
+    INTEGER    deslocar, e ir ao estado 6
+    REAL       deslocar, e ir ao estado 7
+    OCBRACKET  deslocar, e ir ao estado 70
+
+    literal_list    ir ao estado 80
+    vector_literal  ir ao estado 71
+    matrix_literal  ir ao estado 82
+    lit_none        ir ao estado 69
+    literal         ir ao estado 81
 
 
 Estado 71
 
-   49 matrix_literal: matrix_literal COLON . vector_literal
+   53 matrix_literal: vector_literal .
 
-    NONE       deslocar, e ir ao estado 55
-    OCBRACKET  deslocar, e ir ao estado 56
-
-    vector_literal  ir ao estado 79
-    lit_none        ir ao estado 58
+    $padrão  reduzir usando a regra 53 (matrix_literal)
 
 
 Estado 72
 
-   39 dimension: OBRACKET INTEGER . CBRACKET
+   19 operacao: declaracao_matricial ATRIBUITION matrix_literal .
+   55 matrix_literal: matrix_literal . COLON vector_literal
 
-    CBRACKET  deslocar, e ir ao estado 80
+    COLON  deslocar, e ir ao estado 83
+
+    $padrão  reduzir usando a regra 19 (operacao)
 
 
 Estado 73
 
-   42 matricial: type ID dimension dimension .
+   26 teste: exprecao . booleano exprecao
+   26      | exprecao booleano exprecao .
+   28 conta: exprecao . matematica exprecao
 
-    $padrão  reduzir usando a regra 42 (matricial)
+    SUM       deslocar, e ir ao estado 41
+    SUBTRACT  deslocar, e ir ao estado 42
+    MULTIPLY  deslocar, e ir ao estado 43
+    DIVIDE    deslocar, e ir ao estado 44
+    POW       deslocar, e ir ao estado 45
+    MODULUS   deslocar, e ir ao estado 46
+    EQ        deslocar, e ir ao estado 47
+    NE        deslocar, e ir ao estado 48
+    GT        deslocar, e ir ao estado 49
+    GE        deslocar, e ir ao estado 50
+    LT        deslocar, e ir ao estado 51
+    LE        deslocar, e ir ao estado 52
+    AND       deslocar, e ir ao estado 53
+    OR        deslocar, e ir ao estado 54
+
+    SUM       [reduzir usando a regra 26 (teste)]
+    SUBTRACT  [reduzir usando a regra 26 (teste)]
+    MULTIPLY  [reduzir usando a regra 26 (teste)]
+    DIVIDE    [reduzir usando a regra 26 (teste)]
+    POW       [reduzir usando a regra 26 (teste)]
+    MODULUS   [reduzir usando a regra 26 (teste)]
+    EQ        [reduzir usando a regra 26 (teste)]
+    NE        [reduzir usando a regra 26 (teste)]
+    GT        [reduzir usando a regra 26 (teste)]
+    GE        [reduzir usando a regra 26 (teste)]
+    LT        [reduzir usando a regra 26 (teste)]
+    LE        [reduzir usando a regra 26 (teste)]
+    AND       [reduzir usando a regra 26 (teste)]
+    OR        [reduzir usando a regra 26 (teste)]
+    $padrão  reduzir usando a regra 26 (teste)
+
+    booleano    ir ao estado 55
+    matematica  ir ao estado 56
 
 
 Estado 74
 
-   24 teste: OPARENTHESIS exprecao booleano exprecao CPARENTHESIS .
+   26 teste: exprecao . booleano exprecao
+   28 conta: exprecao . matematica exprecao
+   28      | exprecao matematica exprecao .
 
-    $padrão  reduzir usando a regra 24 (teste)
+    SUM       deslocar, e ir ao estado 41
+    SUBTRACT  deslocar, e ir ao estado 42
+    MULTIPLY  deslocar, e ir ao estado 43
+    DIVIDE    deslocar, e ir ao estado 44
+    POW       deslocar, e ir ao estado 45
+    MODULUS   deslocar, e ir ao estado 46
+    EQ        deslocar, e ir ao estado 47
+    NE        deslocar, e ir ao estado 48
+    GT        deslocar, e ir ao estado 49
+    GE        deslocar, e ir ao estado 50
+    LT        deslocar, e ir ao estado 51
+    LE        deslocar, e ir ao estado 52
+    AND       deslocar, e ir ao estado 53
+    OR        deslocar, e ir ao estado 54
+
+    SUM       [reduzir usando a regra 28 (conta)]
+    SUBTRACT  [reduzir usando a regra 28 (conta)]
+    MULTIPLY  [reduzir usando a regra 28 (conta)]
+    DIVIDE    [reduzir usando a regra 28 (conta)]
+    POW       [reduzir usando a regra 28 (conta)]
+    MODULUS   [reduzir usando a regra 28 (conta)]
+    EQ        [reduzir usando a regra 28 (conta)]
+    NE        [reduzir usando a regra 28 (conta)]
+    GT        [reduzir usando a regra 28 (conta)]
+    GE        [reduzir usando a regra 28 (conta)]
+    LT        [reduzir usando a regra 28 (conta)]
+    LE        [reduzir usando a regra 28 (conta)]
+    AND       [reduzir usando a regra 28 (conta)]
+    OR        [reduzir usando a regra 28 (conta)]
+    $padrão  reduzir usando a regra 28 (conta)
+
+    booleano    ir ao estado 55
+    matematica  ir ao estado 56
 
 
 Estado 75
 
-   26 conta: OPARENTHESIS exprecao matematica exprecao CPARENTHESIS .
+   45 dimension: OBRACKET . INTEGER CBRACKET
 
-    $padrão  reduzir usando a regra 26 (conta)
+    INTEGER  deslocar, e ir ao estado 84
 
 
 Estado 76
 
-   44 literal_list: literal_list COLON . literal
+   47 vetorial: type ID dimension .
+   48 matricial: type ID dimension . dimension
 
-    INTEGER  deslocar, e ir ao estado 5
-    REAL     deslocar, e ir ao estado 6
+    OBRACKET  deslocar, e ir ao estado 75
 
-    literal  ir ao estado 81
+    $padrão  reduzir usando a regra 47 (vetorial)
+
+    dimension  ir ao estado 85
 
 
 Estado 77
 
-   45 vector_literal: OCBRACKET literal_list CCBRACKET .
+    3 stmts: stmts . stmt
+    4      | stmts . nlines stmt
+   44 estrutura: IF exprecao nlines stmts . nlines END
 
-    $padrão  reduzir usando a regra 45 (vector_literal)
+    IF            deslocar, e ir ao estado 1
+    TINT          deslocar, e ir ao estado 2
+    TREAL         deslocar, e ir ao estado 3
+    OPARENTHESIS  deslocar, e ir ao estado 4
+    NLINE         deslocar, e ir ao estado 58
+    ID            deslocar, e ir ao estado 5
+    INTEGER       deslocar, e ir ao estado 6
+    REAL          deslocar, e ir ao estado 7
+    TRUE          deslocar, e ir ao estado 8
+    FALSE         deslocar, e ir ao estado 9
+
+    stmt                  ir ao estado 36
+    nlines                ir ao estado 86
+    declaracao            ir ao estado 13
+    declaracao_escalar    ir ao estado 14
+    declaracao_vetorial   ir ao estado 15
+    declaracao_matricial  ir ao estado 16
+    operacao              ir ao estado 17
+    exprecao              ir ao estado 18
+    teste                 ir ao estado 19
+    conta                 ir ao estado 20
+    estrutura             ir ao estado 21
+    escalar               ir ao estado 22
+    vetorial              ir ao estado 23
+    matricial             ir ao estado 24
+    lit_logical           ir ao estado 25
+    literal               ir ao estado 26
+    type                  ir ao estado 27
 
 
 Estado 78
 
-   48 matrix_literal: OCBRACKET matrix_literal CCBRACKET .
+   26 teste: exprecao . booleano exprecao
+   26      | exprecao booleano exprecao .
+   27      | OPARENTHESIS exprecao booleano exprecao . CPARENTHESIS
+   28 conta: exprecao . matematica exprecao
 
-    $padrão  reduzir usando a regra 48 (matrix_literal)
+    SUM           deslocar, e ir ao estado 41
+    SUBTRACT      deslocar, e ir ao estado 42
+    CPARENTHESIS  deslocar, e ir ao estado 87
+    MULTIPLY      deslocar, e ir ao estado 43
+    DIVIDE        deslocar, e ir ao estado 44
+    POW           deslocar, e ir ao estado 45
+    MODULUS       deslocar, e ir ao estado 46
+    EQ            deslocar, e ir ao estado 47
+    NE            deslocar, e ir ao estado 48
+    GT            deslocar, e ir ao estado 49
+    GE            deslocar, e ir ao estado 50
+    LT            deslocar, e ir ao estado 51
+    LE            deslocar, e ir ao estado 52
+    AND           deslocar, e ir ao estado 53
+    OR            deslocar, e ir ao estado 54
+
+    SUM       [reduzir usando a regra 26 (teste)]
+    SUBTRACT  [reduzir usando a regra 26 (teste)]
+    MULTIPLY  [reduzir usando a regra 26 (teste)]
+    DIVIDE    [reduzir usando a regra 26 (teste)]
+    POW       [reduzir usando a regra 26 (teste)]
+    MODULUS   [reduzir usando a regra 26 (teste)]
+    EQ        [reduzir usando a regra 26 (teste)]
+    NE        [reduzir usando a regra 26 (teste)]
+    GT        [reduzir usando a regra 26 (teste)]
+    GE        [reduzir usando a regra 26 (teste)]
+    LT        [reduzir usando a regra 26 (teste)]
+    LE        [reduzir usando a regra 26 (teste)]
+    AND       [reduzir usando a regra 26 (teste)]
+    OR        [reduzir usando a regra 26 (teste)]
+
+    booleano    ir ao estado 55
+    matematica  ir ao estado 56
 
 
 Estado 79
 
-   49 matrix_literal: matrix_literal COLON vector_literal .
+   26 teste: exprecao . booleano exprecao
+   28 conta: exprecao . matematica exprecao
+   28      | exprecao matematica exprecao .
+   29      | OPARENTHESIS exprecao matematica exprecao . CPARENTHESIS
 
-    $padrão  reduzir usando a regra 49 (matrix_literal)
+    SUM           deslocar, e ir ao estado 41
+    SUBTRACT      deslocar, e ir ao estado 42
+    CPARENTHESIS  deslocar, e ir ao estado 88
+    MULTIPLY      deslocar, e ir ao estado 43
+    DIVIDE        deslocar, e ir ao estado 44
+    POW           deslocar, e ir ao estado 45
+    MODULUS       deslocar, e ir ao estado 46
+    EQ            deslocar, e ir ao estado 47
+    NE            deslocar, e ir ao estado 48
+    GT            deslocar, e ir ao estado 49
+    GE            deslocar, e ir ao estado 50
+    LT            deslocar, e ir ao estado 51
+    LE            deslocar, e ir ao estado 52
+    AND           deslocar, e ir ao estado 53
+    OR            deslocar, e ir ao estado 54
+
+    SUM       [reduzir usando a regra 28 (conta)]
+    SUBTRACT  [reduzir usando a regra 28 (conta)]
+    MULTIPLY  [reduzir usando a regra 28 (conta)]
+    DIVIDE    [reduzir usando a regra 28 (conta)]
+    POW       [reduzir usando a regra 28 (conta)]
+    MODULUS   [reduzir usando a regra 28 (conta)]
+    EQ        [reduzir usando a regra 28 (conta)]
+    NE        [reduzir usando a regra 28 (conta)]
+    GT        [reduzir usando a regra 28 (conta)]
+    GE        [reduzir usando a regra 28 (conta)]
+    LT        [reduzir usando a regra 28 (conta)]
+    LE        [reduzir usando a regra 28 (conta)]
+    AND       [reduzir usando a regra 28 (conta)]
+    OR        [reduzir usando a regra 28 (conta)]
+
+    booleano    ir ao estado 55
+    matematica  ir ao estado 56
 
 
 Estado 80
 
-   39 dimension: OBRACKET INTEGER CBRACKET .
+   50 literal_list: literal_list . COLON literal
+   51 vector_literal: OCBRACKET literal_list . CCBRACKET
 
-    $padrão  reduzir usando a regra 39 (dimension)
+    COLON      deslocar, e ir ao estado 89
+    CCBRACKET  deslocar, e ir ao estado 90
 
 
 Estado 81
 
-   44 literal_list: literal_list COLON literal .
+   49 literal_list: literal .
 
-    $padrão  reduzir usando a regra 44 (literal_list)
+    $padrão  reduzir usando a regra 49 (literal_list)
+
+
+Estado 82
+
+   54 matrix_literal: OCBRACKET matrix_literal . CCBRACKET
+   55               | matrix_literal . COLON vector_literal
+
+    COLON      deslocar, e ir ao estado 83
+    CCBRACKET  deslocar, e ir ao estado 91
+
+
+Estado 83
+
+   55 matrix_literal: matrix_literal COLON . vector_literal
+
+    NONE       deslocar, e ir ao estado 66
+    OCBRACKET  deslocar, e ir ao estado 67
+
+    vector_literal  ir ao estado 92
+    lit_none        ir ao estado 69
+
+
+Estado 84
+
+   45 dimension: OBRACKET INTEGER . CBRACKET
+
+    CBRACKET  deslocar, e ir ao estado 93
+
+
+Estado 85
+
+   48 matricial: type ID dimension dimension .
+
+    $padrão  reduzir usando a regra 48 (matricial)
+
+
+Estado 86
+
+    4 stmts: stmts nlines . stmt
+    9 nlines: nlines . NLINE
+   44 estrutura: IF exprecao nlines stmts nlines . END
+
+    IF            deslocar, e ir ao estado 1
+    END           deslocar, e ir ao estado 94
+    TINT          deslocar, e ir ao estado 2
+    TREAL         deslocar, e ir ao estado 3
+    OPARENTHESIS  deslocar, e ir ao estado 4
+    NLINE         deslocar, e ir ao estado 62
+    ID            deslocar, e ir ao estado 5
+    INTEGER       deslocar, e ir ao estado 6
+    REAL          deslocar, e ir ao estado 7
+    TRUE          deslocar, e ir ao estado 8
+    FALSE         deslocar, e ir ao estado 9
+
+    stmt                  ir ao estado 63
+    declaracao            ir ao estado 13
+    declaracao_escalar    ir ao estado 14
+    declaracao_vetorial   ir ao estado 15
+    declaracao_matricial  ir ao estado 16
+    operacao              ir ao estado 17
+    exprecao              ir ao estado 18
+    teste                 ir ao estado 19
+    conta                 ir ao estado 20
+    estrutura             ir ao estado 21
+    escalar               ir ao estado 22
+    vetorial              ir ao estado 23
+    matricial             ir ao estado 24
+    lit_logical           ir ao estado 25
+    literal               ir ao estado 26
+    type                  ir ao estado 27
+
+
+Estado 87
+
+   27 teste: OPARENTHESIS exprecao booleano exprecao CPARENTHESIS .
+
+    $padrão  reduzir usando a regra 27 (teste)
+
+
+Estado 88
+
+   29 conta: OPARENTHESIS exprecao matematica exprecao CPARENTHESIS .
+
+    $padrão  reduzir usando a regra 29 (conta)
+
+
+Estado 89
+
+   50 literal_list: literal_list COLON . literal
+
+    INTEGER  deslocar, e ir ao estado 6
+    REAL     deslocar, e ir ao estado 7
+
+    literal  ir ao estado 95
+
+
+Estado 90
+
+   51 vector_literal: OCBRACKET literal_list CCBRACKET .
+
+    $padrão  reduzir usando a regra 51 (vector_literal)
+
+
+Estado 91
+
+   54 matrix_literal: OCBRACKET matrix_literal CCBRACKET .
+
+    $padrão  reduzir usando a regra 54 (matrix_literal)
+
+
+Estado 92
+
+   55 matrix_literal: matrix_literal COLON vector_literal .
+
+    $padrão  reduzir usando a regra 55 (matrix_literal)
+
+
+Estado 93
+
+   45 dimension: OBRACKET INTEGER CBRACKET .
+
+    $padrão  reduzir usando a regra 45 (dimension)
+
+
+Estado 94
+
+   44 estrutura: IF exprecao nlines stmts nlines END .
+
+    $padrão  reduzir usando a regra 44 (estrutura)
+
+
+Estado 95
+
+   50 literal_list: literal_list COLON literal .
+
+    $padrão  reduzir usando a regra 50 (literal_list)

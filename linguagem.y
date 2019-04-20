@@ -25,7 +25,8 @@ OCBRACKET CCBRACKET TRUE FALSE AND OR
 %type<node> code declaracao dimension literal
 literal_list vector_literal nlines escalar vetorial matrix_literal
 matricial type lit_none operacao stmts stmt declaracao_escalar
-declaracao_vetorial declaracao_matricial teste conta booleano matematica exprecao
+declaracao_vetorial declaracao_matricial teste conta booleano matematica
+exprecao estrutura lit_logical
 
 %start code
 
@@ -47,6 +48,8 @@ stmts:stmt
         { $$ = create_node(literals_node, NULL, $1, $2, $3, NULL); };
 
 stmt: declaracao
+        { $$ = create_node(literals_node, NULL, $1, NULL); }
+    | estrutura
         { $$ = create_node(literals_node, NULL, $1, NULL); }
     | operacao
         { $$ = create_node(literals_node, NULL, $1, NULL); };
@@ -78,6 +81,8 @@ declaracao_matricial: matricial
 
 operacao: declaracao_escalar ATRIBUITION literal
             { $$ = create_node(escalar_node, NULL, $1, $2, $3, NULL); }
+        | declaracao_escalar ATRIBUITION exprecao
+                        { $$ = create_node(escalar_node, NULL, $1, $2, $3, NULL); }
         | declaracao_vetorial ATRIBUITION vector_literal
             { $$ = create_node(escalar_node, NULL, $1, $2, $3, NULL); }
         | declaracao_matricial ATRIBUITION matrix_literal
@@ -88,6 +93,8 @@ operacao: declaracao_escalar ATRIBUITION literal
             { $$ = create_node(literals_node, NULL, $1, NULL); };
 
 exprecao: literal
+            { $$ = create_node(literals_node, NULL, $1, NULL); }
+        | lit_logical
             { $$ = create_node(literals_node, NULL, $1, NULL); }
         | operacao
             { $$ = create_node(literals_node, NULL, $1, NULL); }
@@ -110,6 +117,8 @@ booleano: EQ { $$ = $1; }
         | GE { $$ = $1; }
         | LT { $$ = $1; }
         | LE { $$ = $1; }
+        | AND { $$ = $1; }
+        | OR { $$ = $1; }
 
 matematica: SUM { $$ = $1; }
           | SUBTRACT { $$ = $1; }
@@ -117,6 +126,11 @@ matematica: SUM { $$ = $1; }
           | DIVIDE { $$ = $1; }
           | POW { $$ = $1; }
           | MODULUS { $$ = $1; };
+
+// ESTRUTURA DAS ESTRUTURAS(CONTROLE E REPETIÇÃO)
+
+estrutura:IF exprecao nlines stmts nlines END
+            { $$ = create_node(vetorial_node, NULL, $1, $2, $3, $4, $5, $6, NULL); };
 
 //ESTRUTURA DOS LITERAIS E TIPOS
 
@@ -152,6 +166,9 @@ matrix_literal: vector_literal
                   { $$ = create_node(vect_literal_node, NULL, $1, $2, $3, NULL); };
 
 lit_none: NONE { $$ = $1; };
+
+lit_logical: TRUE { $$ = $1; }
+           | FALSE { $$ = $1; }
 
 literal: INTEGER { $$ = $1; }
        | REAL { $$ = $1; };

@@ -10,4 +10,7 @@ real model[4][4] = {{1,1,1,1},{1,1,1,1},{1,1,1,1},{1,1,1,1}}
 real view[4][4] = none
 real projection[4][4] = none
 
-((1==1)+(a +1))
+if ( a == PI )
+  real modelo = model * view * projection
+  real modelo = model + view + projection
+end
