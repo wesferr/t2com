@@ -1,8 +1,17 @@
 
+
 if ( a == PI )
   real modelo = model * view * projection
   real modelo = model + view + projection
 end
+
+
+| escalar atribuition literal
+{$$ = create_node(declaracao_node, NULL, $1, $2, $3, NULL);}
+| vetorial atribuition vector_literal
+{$$ = create_node(declaracao_node, NULL, $1, $2, $3, NULL);}
+| matricial atribuition matrix_literal
+{$$ = create_node(declaracao_node, NULL, $1, $2, $3, NULL);};
 
 bexpr vexpr mexpr
 

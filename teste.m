@@ -9,5 +9,3 @@ real rotate[4] = {1,1,1,1}
 real model[4][4] = {{1,1,1,1},{1,1,1,1},{1,1,1,1},{1,1,1,1}}
 real view[4][4] = none
 real projection[4][4] = none
-a = a + 1
-a = ( a + 1 )
