@@ -10,6 +10,7 @@ int lineno;
 extern FILE* yyin;
 extern int yyparse();
 extern Node * syntax_tree;
+extern int root_height;
 
 int main(int argc, char* argv[])
 {
@@ -26,21 +27,32 @@ int main(int argc, char* argv[])
 	progname = argv[0];
 
 	int result = yyparse();
+
+
 	if(argc == 3) {
 
 		FILE* output = fopen(argv[2], "w+");
 		assert(output != NULL);
-		uncompile(output, syntax_tree);
+		if(!result){
+			root_height = height(syntax_tree);
+			uncompile(output, syntax_tree);
+			fprintf(output,"OKAY.\n");
+		}
+		else
+			fprintf(output, "ERROR.\n");
 		fclose(output);
 
 	}
 	else
 	{
 		uncompile(stdout, syntax_tree);
-		if(!result)
-			printf("\nOKAY.\n");
+		if(!result){
+			root_height = height(syntax_tree);
+			uncompile(stdout, syntax_tree);
+			printf("OKAY.\n");
+		}
 		else
-			printf("\nERROR.\n");
+			printf("ERROR.\n");
 
 	}
 
@@ -48,4 +60,4 @@ int main(int argc, char* argv[])
 }
 
 int yywrap () { return 1; };
-int yyerror(char* s) {return 2;}
+int yyerror(char* s) { return 2; }

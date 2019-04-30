@@ -12,6 +12,7 @@ int max(int x,int y) {
 }
 
 Node* syntax_tree;
+int root_height;
 
 Node* create_node(Node_type t, char* lexeme,  /* Node* children */ ...){
 
@@ -111,16 +112,13 @@ int height(Node* n){
 void uncompile(FILE* outfile, Node *n){
 
 	if( n!=NULL ) {
-		if(n->n_child>0)
-			for( int i=0; i < n->n_child; i++ )
+		if(n->n_child>0) {
+			for( int i=0; i < n->n_child; i++ ){
+				if(n->children[i]->n_child == 0)
+					fprintf(outfile, "%s\n", n->children[i]->lexeme);
 				uncompile(outfile,n->children[i]);
-
-		if(n->lexeme != NULL){
-				fprintf(outfile, "%s", n->lexeme);
-				// if(strcmp(n->lexeme, "\n")==0)
-				//  	fprintf(outfile, "\n");
+			}
 		}
-
 	}
 
 }

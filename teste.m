@@ -1,6 +1,5 @@
 int a
 real PI = 3.141595
-
 int a = 10
 int translate[4] = {1,1,1,1}
 real scale[4]
@@ -17,16 +16,12 @@ elif (a==b)
 else
 
   while (true)
-
     a++
-
   end
 
   for (int i = 1; i < b; i++)
-
     real contexto = scale *. rotate
     modelo*I * contexto
-
   end
 
 end

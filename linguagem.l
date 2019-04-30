@@ -1,12 +1,15 @@
 	/** DEFINITION sec*/
+
+
 %{
 	#include <stdio.h>
 	#include <stdlib.h>
 	#include <string.h>
-	#include "y.tab.h"
+	#include "linguagem.tab.h"
 	#include "node.h"
 
 %}
+
 
 letter 				[a-zA-Z]
 digit 				[0-9]

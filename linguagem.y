@@ -2,7 +2,7 @@
       #include <stdio.h>
       #include <stdlib.h>
       #include "node.h"
-      #include "y.tab.h"
+      #include "linguagem.tab.h"
 
       extern int yylex();
       extern int yyerror();

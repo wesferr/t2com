@@ -1,22 +1,22 @@
-all: compiler clean
+all: compiler clear
 	./compiler teste.m
 
 debug: compiler clean
 	gdb ./compiler
 
-compiler: main.c y.tab.o lex.yy.o node.o
-	gcc -g -Wall -o compiler main.c y.tab.o lex.yy.o node.o
+compiler: main.c linguagem.tab.o lex.yy.o node.o
+	gcc -g -Wall -o compiler main.c linguagem.tab.o lex.yy.o node.o
 
 lex.yy.o: linguagem.l
-	lex linguagem.l
+	flex linguagem.l
 	gcc -c lex.yy.c -lfl
 
-y.tab.o: linguagem.y
-	yacc -v -d linguagem.y
-	gcc -c y.tab.c -lfl
+linguagem.tab.o: linguagem.y
+	bison -v -d linguagem.y
+	gcc -c linguagem.tab.c -lfl
 
 node.o: node.c
 	gcc -c node.c
 
-clean:
-	rm y.tab.? lex.yy.? node.o
+clear:
+	rm linguagem.tab.? lex.yy.? node.o linguagem.output
