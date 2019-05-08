@@ -53,6 +53,8 @@ stmt: declaracao
         { $$ = create_node(stmt_node, NULL, $1, NULL); }
     | operacao
         { $$ = create_node(stmt_node, NULL, $1, NULL); };
+    | PRINT OPARENTHESIS exprecao CPARENTHESIS
+        { $$ = create_node(stmt_node, NULL, $1, $2, $3, $4, NULL); };
 
 nlines: NLINE
           { $$ = $1; }
