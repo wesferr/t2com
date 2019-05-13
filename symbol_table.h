@@ -6,6 +6,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #define PRIME 211 // 9901
 
@@ -29,7 +30,7 @@ typedef struct {
 /** \brief Nodo da lista encadeada de entradas da tabela de simbolos
  *
  * Para cada hash calculado, a tabela de simbolos possui uma lista encadeada.
- * Seriam as entradas que dão conflito, todas mapeadas no indice certo da tabela.
+ * Seriam as entradas que dï¿½o conflito, todas mapeadas no indice certo da tabela.
  *
  */
 struct table_node_entry {
@@ -56,7 +57,7 @@ int init_table(symbol_t* table);
 
 /** \brief Destruir a tabela de Hash.
  *
- * 'free_table' eh o destrutor da estrutura de dados. Deve ser chamado pelo 
+ * 'free_table' eh o destrutor da estrutura de dados. Deve ser chamado pelo
  * usuario no fim de seu uso de uma tabela de simbolos.
  * @param table, uma referencia sobre uma tabela de simbolos.
  */

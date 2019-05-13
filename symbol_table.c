@@ -31,7 +31,7 @@ char *s;
  * @return o valor 0 se deu certo.
  */
 int init_table(symbol_t* table) {
-   // zera o conteúdo da tabela
+   // zera o conteï¿½do da tabela
    int x = 0;
     for(x = 0; x < PRIME; x++) {
         table->entries[x] = NULL;
@@ -46,7 +46,7 @@ int init_table(symbol_t* table) {
  * @param table, uma referencia sobre uma tabela de simbolos.
  */
 void free_table(symbol_t* table) {
-    // libera a memória das entradas
+    // libera a memï¿½ria das entradas
    int x = 0;
     for(x = 0; x < PRIME; x++) {
         if(table->entries[x] != NULL) {
@@ -82,28 +82,28 @@ void free_table(symbol_t* table) {
 
 entry_t* lookup(symbol_t table, char* name) {
     // A partir de um nome, calcula um hash
-    // para associá-lo a um número inteiro
+    // para associï¿½-lo a um nï¿½mero inteiro
     int hash = hashpjw(name);
-    // que será um índice para acessar a tabela de símbolos.
+    // que serï¿½ um ï¿½ndice para acessar a tabela de sï¿½mbolos.
     // verifica se existe ponteiro
     if(table.entries[hash] != NULL) {
 
         struct table_node_entry * atual = table.entries[hash]; // inicia com o primeiro nodo da lista encadeada
 
-        // se não for a "entry" que estamos procurando (o "name" é diferente) e ainda existe um nodo seguinte...
+        // se nï¿½o for a "entry" que estamos procurando (o "name" ï¿½ diferente) e ainda existe um nodo seguinte...
         while(( strcmp(name, atual->entry_data->name)) && (atual->next != NULL)) {
             atual = atual->next; // vai para o nodo seguinte
         }
 
     // se existe, retorna o ponteiro
 //        return table.entries[hash];
-        if( ! strcmp(name, atual->entry_data->name)) { // se o "name" é igual
+        if( ! strcmp(name, atual->entry_data->name)) { // se o "name" ï¿½ igual
             return atual->entry_data;
-        } else { // se o "name" não é igual, foi até o fim da lista encadeada e não encontrou, então retorna NULL
+        } else { // se o "name" nï¿½o ï¿½ igual, foi atï¿½ o fim da lista encadeada e nï¿½o encontrou, entï¿½o retorna NULL
             return NULL;
         }
     } else {
-    // senão, retorna null
+    // senï¿½o, retorna null
         return NULL;
     }
 }
@@ -116,7 +116,7 @@ entry_t* lookup(symbol_t table, char* name) {
  *   deu certo.
  */
 int insert(symbol_t* table, entry_t* entry) {
-    if(lookup(*table, entry->name) != NULL) { // se a chave já existe, retorna um numero negativo.
+    if(lookup(*table, entry->name) != NULL) { // se a chave jï¿½ existe, retorna um numero negativo.
         return -1;
     }
 
@@ -125,17 +125,17 @@ int insert(symbol_t* table, entry_t* entry) {
     nodo->entry_data = entry;
     nodo->next = NULL;
 
-    // calcula o hash para associá-lo a um inteiro
+    // calcula o hash para associï¿½-lo a um inteiro
     int hash = hashpjw(entry->name);
-    // e se não houver lista encadeada ainda
+    // e se nï¿½o houver lista encadeada ainda
     // entao nenhum elemento foi adicionado ainda para esta chave
-    // insere na tabela de símbolos
+    // insere na tabela de sï¿½mbolos
     if(table->entries[hash] == NULL) {
     // inicia a lista encadeada com este elemento
         table->entries[hash] = nodo;
     } else {
-        // se a lista encadeada já existe, adiciona o elemento no inicio:
-        nodo->next = table->entries[hash]; // o próximo do novo elemento é o primeiro elemento da lista
+        // se a lista encadeada jï¿½ existe, adiciona o elemento no inicio:
+        nodo->next = table->entries[hash]; // o prï¿½ximo do novo elemento ï¿½ o primeiro elemento da lista
         table->entries[hash] = nodo; // agora, o primeiro elemento da lista passa a ser o elemento recem criado
     }
 
@@ -144,7 +144,7 @@ int insert(symbol_t* table, entry_t* entry) {
 
 /** \brief Traduz entry para string
  *
- * Uma entrada individual da tabela de símbolos é transformada em uma string. Declarada aqui para ser chamada pelo print_file_table
+ * Uma entrada individual da tabela de sï¿½mbolos ï¿½ transformada em uma string. Declarada aqui para ser chamada pelo print_file_table
  *
  * @param entry_t, uma entrada na tabela de simbolos.
  * @return a string correspondente a entrada.
@@ -177,10 +177,10 @@ int print_table(symbol_t table) {
  */
 int print_file_table(FILE* out, symbol_t table) {
     int entry_count = 0;
-    // varre a tabela de símbolos
+    // varre a tabela de sï¿½mbolos
     int x = 0;
     for(x = 0; x < PRIME; x++) {
-    // onde houver ponteiro, imprime o conteúdo da entrada
+    // onde houver ponteiro, imprime o conteï¿½do da entrada
         if(table.entries[x] != NULL) {
             char tmp_string[500];
 
@@ -205,4 +205,3 @@ char * str_entry(char * retbuffer, entry_t* entry) {
                        entry->name, entry->type, entry->size, entry->desloc);
     return retbuffer;
 }
-

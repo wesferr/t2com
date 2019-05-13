@@ -1,11 +1,72 @@
 %{
-      #include <stdio.h>
-      #include <stdlib.h>
-      #include "node.h"
-      #include "linguagem.tab.h"
+    #include <stdio.h>
+    #include <stdlib.h>
+    #include <assert.h>
+    #include "node.h"
+    #include "lista.h"
+    #include "symbol_table.h"
+    #include "linguagem.tab.h"
 
-      extern int yylex();
-      extern int yyerror();
+    #define INTEGER_SIZE  16
+    #define REAL_SIZE     32
+
+    extern int yylex();
+    extern int yyerror();
+
+    extern symbol_t symbol_table;
+
+    char* gera_temp(int type) {
+        int size = 32;
+        char *ret = malloc(sizeof(char)*8);
+        sprintf(ret, "%03d(Rx)", temps_size);
+        temps_size += size;
+        return ret;
+    }
+
+    void table_insert(Node* node){
+
+        int tipo_idf, x, y, size;
+        char* lexeme;
+
+        if(node->type == escalar_node){
+            tipo_idf = node->children[0]->type;
+            lexeme = node->children[1]->lexeme;
+            size = tipo_idf == TINT ? INTEGER_SIZE : REAL_SIZE;
+        }
+
+        if(node->type == vetorial_node){
+            tipo_idf = node->children[0]->type;
+            lexeme = node->children[1]->lexeme;
+            x = atoi(node->children[2]->children[1]->lexeme);
+            size = tipo_idf == TINT ? INTEGER_SIZE*x : REAL_SIZE*x;
+        }
+
+        if(node->type == matricial_node){
+            tipo_idf = node->children[0]->type;
+            lexeme = node->children[1]->lexeme;
+            x = atoi(node->children[2]->children[1]->lexeme);
+            y = atoi(node->children[3]->children[1]->lexeme);
+            size = tipo_idf == TINT ? INTEGER_SIZE*x*y : REAL_SIZE*x*y;
+        }
+
+        entry_t* existente = lookup(symbol_table, lexeme);
+        if(existente == NULL){
+
+            entry_t* new_entry=(entry_t *) malloc(sizeof(entry_t));
+            assert(new_entry != NULL);
+
+            new_entry->name = lexeme;
+            new_entry->type = tipo_idf;
+            new_entry->desloc = vars_size;
+            new_entry->size = size;
+            vars_size += size;
+
+            assert(!insert(&symbol_table, new_entry)!=0);
+
+        }
+
+    }
+
 %}
 
 %union {
@@ -41,43 +102,44 @@ code: stmts NLINE
         };
 
 stmts:stmt
-        { $$ = create_node(stmts_node, NULL, $1, NULL); }
+        {
+            $$ = $1;
+        }
      |stmts stmt
-        { $$ = create_node(stmts_node, NULL, $1, $2, NULL); }
+        {
+            $$ = create_node(stmts_node, NULL, $1, $2, NULL);
+        }
+
      |stmts nlines stmt
-        { $$ = create_node(stmts_node, NULL, $1, $2, $3, NULL); };
+        {
+            $$ = create_node(stmts_node, NULL, $1, $2, $3, NULL);
+        };
 
-stmt: declaracao
-        { $$ = create_node(stmt_node, NULL, $1, NULL); }
-    | estrutura
-        { $$ = create_node(stmt_node, NULL, $1, NULL); }
-    | operacao
-        { $$ = create_node(stmt_node, NULL, $1, NULL); };
+stmt: declaracao { $$ = $1; }
+    | estrutura { $$ = $1; }
+    | operacao { $$ = $1; }
     | PRINT OPARENTHESIS exprecao CPARENTHESIS
-        { $$ = create_node(stmt_node, NULL, $1, $2, $3, $4, NULL); };
+        {
+            $$ = create_node(stmt_node, NULL, $1, $2, $3, $4, NULL);
+            struct tac* new_tac = create_inst_tac("",$3->lexeme,"PRINT","");
+            append_inst_tac(&($$->code),new_tac);
+        };
 
-nlines: NLINE
-          { $$ = $1; }
+nlines: NLINE { $$ = $1; }
       | nlines NLINE
           { $$ = create_node(nlines_node, NULL, $1, $2, NULL); };
 
 // ESTRUTURAS DECLARACAO
 
-declaracao: declaracao_escalar
-              { $$ = create_node(declaracao_node, NULL, $1, NULL); }
-          | declaracao_vetorial
-              { $$ = create_node(declaracao_node, NULL, $1, NULL); }
-          | declaracao_matricial
-              { $$ = create_node(declaracao_node, NULL, $1, NULL); };
+declaracao: declaracao_escalar { $$ = $1; }
+          | declaracao_vetorial { $$ = $1; }
+          | declaracao_matricial { $$ = $1; };
 
-declaracao_escalar: escalar
-                      { $$ = create_node(declaracao_escalar_node, NULL, $1, NULL); };
+declaracao_escalar: escalar { $$ = $1; };
 
-declaracao_vetorial:vetorial
-                      { $$ = create_node(declaracao_vetorial_node, NULL, $1, NULL); };
+declaracao_vetorial: vetorial { $$ = $1; };
 
-declaracao_matricial: matricial
-                        { $$ = create_node(declaracao_matricial_node, NULL, $1, NULL); };
+declaracao_matricial: matricial { $$ = $1; };
 
 // ESTRUTURA DAS OPERACOES
 
@@ -90,7 +152,9 @@ operacao: declaracao_escalar ATRIBUITION literal
         | declaracao_matricial ATRIBUITION matrix_literal
             { $$ = create_node(operacao_node, NULL, $1, $2, $3, NULL); };
         | ID INCREMENT
-            { $$ = create_node(operacao_node, NULL, $1, $2, NULL); };
+            {
+                $$ = create_node(operacao_node, NULL, $1, $2, NULL);
+            };
         | ID DECREMENT
             { $$ = create_node(operacao_node, NULL, $1, $2, NULL); };
         | ID IMATRIX
@@ -102,14 +166,10 @@ operacao: declaracao_escalar ATRIBUITION literal
         | conta
             { $$ = create_node(operacao_node, NULL, $1, NULL); };
 
-exprecao: literal
-            { $$ = create_node(exprecao_node, NULL, $1, NULL); }
-        | lit_logical
-            { $$ = create_node(exprecao_node, NULL, $1, NULL); }
-        | operacao
-            { $$ = create_node(exprecao_node, NULL, $1, NULL); }
-        | ID
-            { $$ = $1; };
+exprecao: literal { $$ = $1; }
+        | lit_logical { $$ = $1; }
+        | operacao { $$ = $1; }
+        | ID { $$ = $1; };
 
 teste:exprecao booleano exprecao
         { $$ = create_node(teste_node, NULL, $1, $2, $3, NULL); };
@@ -178,17 +238,25 @@ dimension:  OBRACKET INTEGER CBRACKET
               { $$ = create_node(dimension_node, NULL, $1, $2, $3, NULL); };
 
 escalar:  type ID
-            { $$ = create_node(escalar_node, NULL, $1, $2, NULL); };
+            {
+                $$ = create_node(escalar_node, NULL, $1, $2, NULL);
+                table_insert($$);
+             };
 
 vetorial: type ID dimension
-            { $$ = create_node(vetorial_node, NULL, $1, $2, $3, NULL); };
+            {
+                $$ = create_node(vetorial_node, NULL, $1, $2, $3, NULL);
+                table_insert($$);
+            };
 
 matricial:  type ID dimension dimension
-              { $$ = create_node(matricial_node, NULL, $1, $2, $3, $4, NULL); };
+              {
+                  $$ = create_node(matricial_node, NULL, $1, $2, $3, $4, NULL);
+                  table_insert($$);
+              };
 
 
-literal_list: literal
-                { $$ = create_node(literal_list_node, NULL, $1, NULL); }
+literal_list: literal { $$ = $1; }
             | literal_list COLON literal
                 { $$ = create_node(literal_list_node, NULL, $1, $2, $3, NULL); };
 
@@ -199,7 +267,7 @@ vector_literal: OCBRACKET literal_list CCBRACKET
                   { $$ = create_node(vector_literal_node, NULL, $1, NULL); };
 
 matrix_literal: vector_literal
-                  { $$ = create_node(matrix_literal_node, NULL, $1, NULL); }
+                  { $$ = $1; }
               | OCBRACKET matrix_literal CCBRACKET
                   { $$ = create_node(matrix_literal_node, NULL, $1, $2, $3, NULL); }
               | matrix_literal COLON vector_literal

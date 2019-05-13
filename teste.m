@@ -1,7 +1,7 @@
 int a
 real PI = 3.141595
 int a = 10
-int translate[4] = {1,1,1,1}
+real translate[4] = {1,1,1,1}
 real scale[4]
 real rotate[4] = {1,1,1,1}
 
@@ -21,7 +21,7 @@ else
 
   for (int i = 1; i < b; i++)
     real contexto = scale *. rotate
-    modelo*I * contexto
+    modelo * I * contexto
   end
 
 end

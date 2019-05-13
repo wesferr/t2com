@@ -54,7 +54,7 @@ typedef struct _node {
    int line_num;   /**< numero de linha. */
    char* lexeme;   /**< o lexema retornado pelo analizador lexical. */
    Node_type type; /**< Um dos valores definidos*/
-   void* attribute;/**< Qualquer coisa por enquanto. */
+   struct node_tac * code;
 
    struct _node** children;
    unsigned int n_child;

@@ -2,6 +2,8 @@
 #include <assert.h>
 
 int tac_line = 0;
+int temps_size;
+int vars_size;
 
 struct tac* create_inst_tac(const char* res, const char* arg1, const char* op, const char* arg2){
 
@@ -18,7 +20,7 @@ struct tac* create_inst_tac(const char* res, const char* arg1, const char* op, c
 	strcpy(inst_tac->res, res);
 
 	inst_tac->arg1 = (char *) malloc(sizeof(char)*(strlen(arg1)+1));
-	assert(inst_tac->arg1 != NULL)
+	assert(inst_tac->arg1 != NULL);
 	strcpy(inst_tac->arg1, arg1);
 
 	inst_tac->arg2 = (char *) malloc(sizeof(char)*(strlen(arg2)+1));
@@ -32,22 +34,21 @@ struct tac* create_inst_tac(const char* res, const char* arg1, const char* op, c
 void print_inst_tac(FILE* out, struct tac i){
 
 	if(strcmp(i.op,"print") != 0){
-		if(strcmp(i.op,"=") == 0){
-			fprintf(out, "%s := %s\n", i.res, i.arg1);
-		}
-		else {
-    		fprintf(out, "%s := %s %s %s\n", i.res, i.arg1, i.op, i.arg2);
-		}
+        fprintf(out, "%s %s\n", i.op, i.arg1);
+        return;
+    }
+	else if(strcmp(i.op,"=") == 0){
+		fprintf(out, "%s := %s\n", i.res, i.arg1);
 	}
-	else{
-		fprintf(out, "%s %s\n", i.op, i.arg1);
+	else {
+		fprintf(out, "%s := %s %s %s\n", i.res, i.arg1, i.op, i.arg2);
 	}
 }
 
 
 void print_tac(FILE* out, struct node_tac * code){
-
-	fprintf(out, "%d\n%d\n", vars_size,temps_size);
+    extern int vars_size;
+	fprintf(out, "%d - %d:\n", vars_size,temps_size);
 	struct node_tac * tac_pointer;
 	tac_pointer = code;
 	while(tac_pointer){
